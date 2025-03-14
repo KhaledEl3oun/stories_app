@@ -1,0 +1,2 @@
+/Users/khaledel3oun/Desktop/webbing projects/stories-main/android/app/.cxx/Debug/3py1g38s/x86/CMakeFiles/edit_cache.dir
+/Users/khaledel3oun/Desktop/webbing projects/stories-main/android/app/.cxx/Debug/3py1g38s/x86/CMakeFiles/rebuild_cache.dir

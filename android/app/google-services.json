@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "156825976056",
+    "project_id": "stories-app-73826",
+    "storage_bucket": "stories-app-73826.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156825976056:android:720da6eb6299a41ad04f0d",
+        "android_client_info": {
+          "package_name": "com.example.stories_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAB1dKAw6LQUB1o5iX6oJb-mW2DqsfkQ3E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
