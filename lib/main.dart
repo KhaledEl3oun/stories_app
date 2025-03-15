@@ -12,30 +12,29 @@ import 'package:stories_app/core/theme/cubit/theme_cubit.dart';
 import 'package:stories_app/feature/auth/controller/auth_cubit.dart';
 import 'package:stories_app/feature/home/controller/category_cubit.dart';
 
-
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // هذا يعمل عندما يكون التطبيق في الخلفية أو مغلق
-  print("📩 إشعار مستلم في الخلفية: ${message.notification?.title} - ${message.notification?.body}");
+  print(
+      "📩 إشعار مستلم في الخلفية: ${message.notification?.title} - ${message.notification?.body}");
 }
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); 
 
- FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await GetStorage.init();
   DioHelper.init();
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider<ThemeCubit>(
-          create: (context) => ThemeCubit()),
-          BlocProvider<AuthCubit>(
-            create: (context) => AuthCubit()
-            ),  // ✅ كيوبت تسجيل الدخول
+        BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
+        BlocProvider<AuthCubit>(
+            create: (context) => AuthCubit()), // ✅ كيوبت تسجيل الدخول
         BlocProvider<CategoryCubit>(
-          create: (context) => CategoryCubit()..fetchCategoriesAndStories(),)
-           //
-        
+          create: (context) => CategoryCubit()..fetchCategoriesAndStories(),
+        )
+        //
       ],
       child: const MyApp(),
     ),
