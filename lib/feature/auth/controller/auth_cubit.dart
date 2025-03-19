@@ -25,6 +25,7 @@ class AuthCubit extends Cubit<AuthState> {
         data: {'email': email, 'password': password},
       );
       final responseData = response.data;
+      debugPrint("🟢 Response Data: $responseData");
       if (responseData != null && responseData['token'] != null) {
         final userModel = UserModel.fromJson(responseData);
 
@@ -32,11 +33,13 @@ class AuthCubit extends Cubit<AuthState> {
         box.write('userName', responseData['data']['userName']);
         emit(AuthLoggedIn(userModel));
       } else {
-        emit(AuthFailure("حدث خطأ أثناء تسجيل الدخول، يرجى المحاولة مرة أخرى."));
+        emit(
+            AuthFailure("حدث خطأ أثناء تسجيل الدخول، يرجى المحاولة مرة أخرى."));
       }
     } catch (error) {
       if (error is DioException) {
-        emit(AuthFailure(error.response?.data['message'] ?? "فشل في تسجيل الدخول."));
+        emit(AuthFailure(
+            error.response?.data['message'] ?? "فشل في تسجيل الدخول."));
       } else {
         emit(AuthFailure("حدث خطأ غير متوقع، يرجى المحاولة لاحقًا."));
       }
@@ -44,7 +47,8 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   // 🔵 تسجيل حساب جديد
-  void register(String userName, String email, String phone, String password, String passwordConfirm) async {
+  void register(String userName, String email, String phone, String password,
+      String passwordConfirm) async {
     emit(AuthLoading());
     try {
       final response = await DioHelper.postData(
@@ -66,7 +70,8 @@ class AuthCubit extends Cubit<AuthState> {
       }
     } catch (error) {
       if (error is DioException) {
-        emit(AuthFailure(error.response?.data['message'] ?? "حدث خطأ أثناء إنشاء الحساب"));
+        emit(AuthFailure(
+            error.response?.data['message'] ?? "حدث خطأ أثناء إنشاء الحساب"));
       } else {
         emit(AuthFailure("حدث خطأ غير متوقع"));
       }
@@ -84,7 +89,7 @@ class AuthCubit extends Cubit<AuthState> {
 
       if (response.statusCode == 200) {
         final messageModel = MessageModel.fromJson(response.data);
-        emit(AuthSuccess(messageModel.message)); 
+        emit(AuthSuccess(messageModel.message));
       } else {
         emit(AuthFailure("فشل إرسال طلب إعادة تعيين كلمة المرور"));
       }
@@ -104,9 +109,9 @@ class AuthCubit extends Cubit<AuthState> {
 
       if (response.statusCode == 200) {
         final messageModel = MessageModel.fromJson(response.data);
-        emit(AuthSuccess(messageModel.message)); 
+        emit(AuthSuccess(messageModel.message));
       } else {
-         print("❌ خطأ في البيانات: ${response.data}");
+        print("❌ خطأ في البيانات: ${response.data}");
         emit(AuthFailure("كود التحقق غير صحيح"));
       }
     } catch (error) {

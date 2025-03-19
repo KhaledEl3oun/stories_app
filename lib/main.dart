@@ -10,7 +10,10 @@ import 'package:stories_app/core/route/route_generate.dart';
 import 'package:stories_app/core/theme/app_themes.dart';
 import 'package:stories_app/core/theme/cubit/theme_cubit.dart';
 import 'package:stories_app/feature/auth/controller/auth_cubit.dart';
+import 'package:stories_app/feature/favorite/controller/cubit/favorite_cubit.dart';
 import 'package:stories_app/feature/home/controller/category_cubit.dart';
+import 'package:stories_app/feature/home/controller/single_details_category_cubit.dart';
+import 'package:stories_app/feature/home/controller/sub_category_cubit.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // هذا يعمل عندما يكون التطبيق في الخلفية أو مغلق
@@ -29,11 +32,19 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
-        BlocProvider<AuthCubit>(
-            create: (context) => AuthCubit()), // ✅ كيوبت تسجيل الدخول
+        BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
         BlocProvider<CategoryCubit>(
           create: (context) => CategoryCubit()..fetchCategoriesAndStories(),
-        )
+        ),
+        BlocProvider<SubCategoryCubit>(
+          create: (context) => SubCategoryCubit(),
+        ),
+        BlocProvider<SingleDetailsCategoryCubit>(
+          create: (context) => SingleDetailsCategoryCubit(),
+        ),
+        BlocProvider<FavoriteCubit>(
+          create: (context) => FavoriteCubit()..fetchGetAllFavorite(),
+        ),
         //
       ],
       child: const MyApp(),

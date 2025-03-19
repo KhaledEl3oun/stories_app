@@ -7,7 +7,7 @@ import 'package:stories_app/core/theme/cubit/theme_cubit.dart';
 import 'package:stories_app/core/widget/app_padding/app_padding.dart';
 import 'package:stories_app/core/widget/text/app_text.dart';
 import 'package:stories_app/feature/auth/controller/auth_cubit.dart';
-
+import 'package:stories_app/feature/favorite/controller/cubit/favorite_cubit.dart';
 
 class CustomDrawer extends StatelessWidget {
   @override
@@ -46,6 +46,7 @@ class CustomDrawer extends StatelessWidget {
               const Divider(),
               _buildDrawerItem('المفضلة', Icons.favorite, context, () {
                 context.pushNamed(AppRoutes.favoriteScreen);
+                context.read<FavoriteCubit>().fetchGetAllFavorite();
               }),
               const Divider(),
               _buildDrawerItem('الدعم الفني', Icons.headset_mic, context, () {
@@ -74,7 +75,7 @@ class CustomDrawer extends StatelessWidget {
               // ),
               const Divider(),
               _buildDrawerItem('تسجيل الخروج', Icons.logout, context, () {
-               AuthCubit().logout(context);
+                AuthCubit().logout(context);
               }),
               const Divider(),
             ],

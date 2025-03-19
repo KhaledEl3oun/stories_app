@@ -17,7 +17,7 @@ import 'package:stories_app/feature/drawer/screen/update_password.dart';
 import 'package:stories_app/feature/drawer/screen/update_phone.dart';
 import 'package:stories_app/feature/home/views/home_page.dart';
 import 'package:stories_app/feature/home/views/story_page.dart';
-import 'package:stories_app/feature/home/widget/story_details.dart';
+import 'package:stories_app/feature/home/views/story_details.dart';
 import 'package:stories_app/feature/notification/views/notification_page.dart';
 import 'package:stories_app/feature/on_boarding/on_boarding_page.dart';
 import 'package:stories_app/feature/on_boarding/on_boarding_page2.dart';

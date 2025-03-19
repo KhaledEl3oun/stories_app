@@ -28,7 +28,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordConfirmController = TextEditingController();
+  final TextEditingController passwordConfirmController =
+      TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -52,7 +53,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   SizedBox(height: 10.h),
-
                   Form(
                     key: _formKey,
                     child: Column(
@@ -79,24 +79,25 @@ class _RegisterPageState extends State<RegisterPage> {
                           controller: phoneController,
                         ),
                         const SizedBox(height: 30),
-                       CustomInputField(
-  isPassword: true,
-  label: 'كلمة المرور',
-  controller: passwordController,
-  validator: (value) {
-    if (value == null || value.isEmpty) {
-      return 'كلمة المرور مطلوبة';
-    }
-    if (value.length < 8) {
-      return 'يجب أن تكون كلمة المرور على الأقل 8 أحرف';
-    }
-    if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*._-])').hasMatch(value)) {
-      return 'يجب أن تحتوي كلمة المرور على حرف كبير، حرف صغير، رقم، ورمز خاص (!@#\$%^&*._-)';
-    }
-    return null;
-  },
-),
-
+                        CustomInputField(
+                          isPassword: true,
+                          label: 'كلمة المرور',
+                          controller: passwordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'كلمة المرور مطلوبة';
+                            }
+                            if (value.length < 8) {
+                              return 'يجب أن تكون كلمة المرور على الأقل 8 أحرف';
+                            }
+                            if (!RegExp(
+                                    r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*._-])')
+                                .hasMatch(value)) {
+                              return 'يجب أن تحتوي كلمة المرور على حرف كبير، حرف صغير، رقم، ورمز خاص (!@#\$%^&*._-)';
+                            }
+                            return null;
+                          },
+                        ),
                         const SizedBox(height: 30),
                         CustomInputField(
                           isPassword: true,
@@ -114,18 +115,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       ],
                     ),
                   ),
-
                   SizedBox(height: 30.h),
-
                   BlocConsumer<AuthCubit, AuthState>(
                     listener: (context, state) {
                       if (state is AuthRegistered) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("تم إنشاء الحساب بنجاح!")),
                         );
-                         Future.delayed(const Duration(seconds: 1), () {
-                         context.pushNamed(AppRoutes.loginScreen);
-                         });
+                        Future.delayed(const Duration(seconds: 1), () {
+                          context.pushNamed(AppRoutes.loginScreen);
+                        });
                       } else if (state is AuthFailure) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text(state.error)),
@@ -135,12 +134,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     builder: (context, state) {
                       return Center(
                         child: AppButton(
-                          minimumSize: MaterialStateProperty.all(const Size(380, 50)),
+                          minimumSize:
+                              MaterialStateProperty.all(const Size(380, 50)),
                           onPressed: state is AuthLoading
                               ? null
                               : () {
                                   if (_formKey.currentState!.validate()) {
-                                    BlocProvider.of<AuthCubit>(context).register(
+                                    BlocProvider.of<AuthCubit>(context)
+                                        .register(
                                       nameController.text,
                                       emailController.text,
                                       phoneController.text,
@@ -149,14 +150,14 @@ class _RegisterPageState extends State<RegisterPage> {
                                     );
                                   }
                                 },
-                          text: state is AuthLoading ? "جاري التسجيل..." : "إنشاء حساب",
+                          text: state is AuthLoading
+                              ? "جاري التسجيل..."
+                              : "إنشاء حساب",
                         ),
                       );
                     },
                   ),
-
                   SizedBox(height: 20.h),
-
                   TextPrompt(
                     primaryText: ' لديك حساب بالفعل ؟  ',
                     actionText: ' سجل الان',
@@ -164,7 +165,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       context.pushNamed(AppRoutes.loginScreen);
                     },
                   ),
-
                   SizedBox(height: 50.h),
                 ],
               ),

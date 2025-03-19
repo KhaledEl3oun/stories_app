@@ -6,7 +6,7 @@ import 'package:stories_app/core/widget/button/app_button.dart';
 import 'package:stories_app/core/widget/text/app_text.dart';
 import 'package:stories_app/core/widget/text_failed/custom_text_failed.dart';
 import 'package:stories_app/feature/drawer/drawer_page.dart';
-import 'package:stories_app/feature/home/widget/custom_row_header.dart';
+import 'package:stories_app/feature/home/views/widget/custom_row_header.dart';
 
 class RateAppPage extends StatelessWidget {
   RateAppPage({super.key});

@@ -3,7 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stories_app/core/cache/preference_manager.dart';
 
 class ThemeCubit extends Cubit<ThemeMode> {
-  ThemeCubit() : super(PreferenceManager().isDarkMode() ? ThemeMode.dark : ThemeMode.light);
+  ThemeCubit()
+      : super(PreferenceManager().isDarkMode()
+            ? ThemeMode.dark
+            : ThemeMode.light);
 
   void toggleTheme() {
     if (state == ThemeMode.dark) {

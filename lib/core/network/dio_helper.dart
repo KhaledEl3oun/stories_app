@@ -6,7 +6,7 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'http://194.164.77.238:8002', 
+        baseUrl: 'http://194.164.77.238:8002',
         receiveDataWhenStatusError: true,
       ),
     );
@@ -16,16 +16,19 @@ class DioHelper {
   static Future<Response> getData({
     required String url,
     Map<String, dynamic>? query,
+    Map<String, dynamic>? headers,
   }) async {
-    return await dio.get(url, queryParameters: query);
+    return await dio.get(url,
+        queryParameters: query, options: Options(headers: headers));
   }
 
   // 🔵 طلب **POST** لإرسال البيانات
   static Future<Response> postData({
     required String url,
     required Map<String, dynamic> data,
+    Map<String, dynamic>? headers,
   }) async {
-    return await dio.post(url, data: data);
+    return await dio.post(url, data: data, options: Options(headers: headers));
   }
 
   // 🟠 طلب **PUT** لتحديث البيانات

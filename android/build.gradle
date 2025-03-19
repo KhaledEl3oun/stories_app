@@ -5,6 +5,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
+        classpath 'com.android.tools.build:gradle:8.2.1'  // ✅ أضف هذا السطر
         classpath 'com.google.gms:google-services:4.4.2' // ✅ تأكد من وجود هذا السطر
     }
 }

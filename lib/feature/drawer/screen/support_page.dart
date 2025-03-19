@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:stories_app/core/widget/app_padding/app_padding.dart';
 import 'package:stories_app/core/widget/text/app_text.dart';
 import 'package:stories_app/feature/drawer/drawer_page.dart';
-import 'package:stories_app/feature/home/widget/custom_row_header.dart';
+import 'package:stories_app/feature/home/views/widget/custom_row_header.dart';
 
 class SupportPage extends StatelessWidget {
   SupportPage({super.key});

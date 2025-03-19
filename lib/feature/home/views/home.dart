@@ -6,4 +6,4 @@ export 'package:stories_app/core/widget/app_padding/app_padding.dart';
 export 'package:stories_app/core/widget/text/app_text.dart';
 export 'package:stories_app/core/widget/text_failed/custom_textfailed%20_search.dart';
 export 'package:stories_app/feature/drawer/drawer_page.dart';
-export 'package:stories_app/feature/home/widget/custom_row_header.dart';
+export 'package:stories_app/feature/home/views/widget/custom_row_header.dart';

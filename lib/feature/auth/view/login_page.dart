@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final themeMode = context.watch<ThemeCubit>().state;
-    
+
     return BlocProvider(
       create: (context) => AuthCubit(),
       child: Scaffold(
@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: 40.h),
                   const CustomHeaderRow(title: 'تسجيل الدخول'),
                   SizedBox(height: 20.h),
-                  
+
                   /// ✅ صورة تسجيل الدخول
                   Center(
                     child: Image.asset(
@@ -105,8 +105,8 @@ class _LoginPageState extends State<LoginPage> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("تم تسجيل الدخول بنجاح!")),
                         );
-                       Future.microtask(() {
-                       context.pushNamed(AppRoutes.homeScreen);
+                        Future.microtask(() {
+                          context.pushNamed(AppRoutes.homeScreen);
                         });
                       } else if (state is AuthFailure) {
                         ScaffoldMessenger.of(context).showSnackBar(
