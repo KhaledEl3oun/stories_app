@@ -36,122 +36,134 @@ class _LoginPageState extends State<LoginPage> {
       create: (context) => AuthCubit(),
       child: Scaffold(
         body: 
-        AppPadding(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 40.h),
-                  const CustomHeaderRow(title: 'تسجيل الدخول'),
-                  SizedBox(height: 20.h),
-
-                  /// ✅ صورة تسجيل الدخول
-                  Center(
-                    child: Image.asset(
-                      AppImages.logoSignIn,
-                      fit: BoxFit.cover,
+        Container(
+           decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              Theme.of(context).scaffoldBackgroundColor == const Color(0xff191201)
+                  ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
+                  : 'assets/images/lightBg.png', // ✅ خلفية اللايت
+            ),
+            fit: BoxFit.cover, // ✅ جعل الصورة تغطي الشاشة بالكامل
+          ),
+        ),
+          child: AppPadding(
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 40.h),
+                    const CustomHeaderRow(title: 'تسجيل الدخول'),
+                    SizedBox(height: 20.h),
+          
+                    /// ✅ صورة تسجيل الدخول
+                    Center(
+                      child: Image.asset(
+                        AppImages.logoSignIn,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-
-                  SizedBox(height: 10.h),
-
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        CustomInputField(
-                          label: "البريد الالكتروني",
-                          controller: emailController,
-                          validator: xValidator([
-                            IsRequired('البريد الإلكتروني مطلوب'),
-                            IsEmail('البريد الإلكتروني غير صالح'),
-                          ]),
-                        ),
-                        const SizedBox(height: 30),
-                        CustomInputField(
-                          isPassword: true,
-                          label: 'كلمه المرور',
-                          controller: passwordController,
-                          validator: xValidator([
-                            IsRequired('كلمة المرور مطلوبة'),
-                          ]),
-                        ),
-                      ],
+          
+                    SizedBox(height: 10.h),
+          
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          CustomInputField(
+                            label: "البريد الالكتروني",
+                            controller: emailController,
+                            validator: xValidator([
+                              IsRequired('البريد الإلكتروني مطلوب'),
+                              IsEmail('البريد الإلكتروني غير صالح'),
+                            ]),
+                          ),
+                          const SizedBox(height: 30),
+                          CustomInputField(
+                            isPassword: true,
+                            label: 'كلمه المرور',
+                            controller: passwordController,
+                            validator: xValidator([
+                              IsRequired('كلمة المرور مطلوبة'),
+                            ]),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  /// ✅ نسيت كلمة المرور؟
-                  GestureDetector(
-                    onTap: () {
-                      context.pushNamed(AppRoutes.forgetPasswordPage);
-                    },
-                    child: AppText(
-                      text: 'نسيت كلمه المرور؟',
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(
-                              color: AppColors.primaryColor, fontSize: 18),
+          
+                    const SizedBox(height: 10),
+          
+                    /// ✅ نسيت كلمة المرور؟
+                    GestureDetector(
+                      onTap: () {
+                        context.pushNamed(AppRoutes.forgetPasswordPage);
+                      },
+                      child: AppText(
+                        text: 'نسيت كلمه المرور؟',
+                        textStyle: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(
+                                color: AppColors.primaryColor, fontSize: 18),
+                      ),
                     ),
-                  ),
-
-                  SizedBox(height: 30.h),
-
-                  BlocConsumer<AuthCubit, AuthState>(
-                    listener: (context, state) {
-                      if (state is AuthLoggedIn) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("تم تسجيل الدخول بنجاح!",
-                          style: TextStyle(color: Colors.green,fontFamily: 'cairo'),)),
+          
+                    SizedBox(height: 30.h),
+          
+                    BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                        if (state is AuthLoggedIn) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("تم تسجيل الدخول بنجاح!",
+                            style: TextStyle(color: Colors.green,fontFamily: 'cairo'),)),
+                          );
+                          Future.microtask(() {
+                            context.pushNamed(AppRoutes.homeScreen);
+                          });
+                        } else if (state is AuthFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.error)),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        return Center(
+                          child: AppButton(
+                            minimumSize:
+                                MaterialStateProperty.all(const Size(380, 50)),
+                            onPressed: state is AuthLoading
+                                ? null
+                                : () {
+                                    if (_formKey.currentState!.validate()) {
+                                      BlocProvider.of<AuthCubit>(context).login(
+                                        emailController.text,
+                                        passwordController.text,
+                                      );
+                                    }
+                                  },
+                            text: state is AuthLoading
+                                ? "جاري تسجيل الدخول..."
+                                : "تسجيل الدخول",
+                          ),
                         );
-                        Future.microtask(() {
-                          context.pushNamed(AppRoutes.homeScreen);
-                        });
-                      } else if (state is AuthFailure) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(state.error)),
-                        );
-                      }
-                    },
-                    builder: (context, state) {
-                      return Center(
-                        child: AppButton(
-                          minimumSize:
-                              MaterialStateProperty.all(const Size(380, 50)),
-                          onPressed: state is AuthLoading
-                              ? null
-                              : () {
-                                  if (_formKey.currentState!.validate()) {
-                                    BlocProvider.of<AuthCubit>(context).login(
-                                      emailController.text,
-                                      passwordController.text,
-                                    );
-                                  }
-                                },
-                          text: state is AuthLoading
-                              ? "جاري تسجيل الدخول..."
-                              : "تسجيل الدخول",
-                        ),
-                      );
-                    },
-                  ),
-
-                  SizedBox(height: 20.h),
-
-                  /// ✅ ليس لديك حساب؟
-                  TextPrompt(
-                    primaryText: 'ليس لديك حساب؟  ',
-                    actionText: 'انشئ حساب الان',
-                    onTap: () {
-                      context.pushNamed(AppRoutes.registerScreen);
-                    },
-                  ),
-
-                  SizedBox(height: 50.h),
-                ],
+                      },
+                    ),
+          
+                    SizedBox(height: 20.h),
+          
+                    /// ✅ ليس لديك حساب؟
+                    TextPrompt(
+                      primaryText: 'ليس لديك حساب؟  ',
+                      actionText: 'انشئ حساب الان',
+                      onTap: () {
+                        context.pushNamed(AppRoutes.registerScreen);
+                      },
+                    ),
+          
+                    SizedBox(height: 50.h),
+                  ],
+                ),
               ),
             ),
           ),

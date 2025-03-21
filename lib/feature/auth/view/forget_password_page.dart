@@ -30,69 +30,81 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       create: (context) => AuthCubit(),
       child: Scaffold(
         body:
-         SingleChildScrollView(
-          child: AppPadding(
-            child: Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 30),
-                  const CustomHeaderRow(title: 'استعادة كلمة المرور'),
-                  SizedBox(height: 30.h),
-                  Center(
-                    child: Image.asset(
-                      AppImages.logoForgetPass,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  SizedBox(height: 20.h),
-                  const AppText(
-                    textAlign: TextAlign.center,
-                    text: 'ادخل البريد الالكتروني أو رقم الهاتف المربوط بحسابك لاستلام الرقم السري المؤقت',
-                  ),
-                  SizedBox(height: 40.h),
-                  CustomInputField(
-                    controller: emailController,  // 🔹 تأكد من ربط الكنترولر
-                    label: "البريد الإلكتروني",
-                    validator: xValidator([
-                      IsRequired('يرجى إدخال البريد الإلكتروني'),
-                    ]),
-                    onChanged: (value) {},
-                  ),
-                  const SizedBox(height: 30),
-                  Center(
-                    child: BlocConsumer<AuthCubit, AuthState>(
-                      listener: (context, state) {
-                        if (state is AuthSuccess) {
-                          context.pushReplacementNamed(AppRoutes.verificationPage,
-                          arguments:{"email": emailController.text.trim()} );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.message)),
-                          );
-                        } else if (state is AuthFailure) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(state.error)),
-                          );
-                        }
-                      },
-                      builder: (context, state) {
-                        return state is AuthLoading
-                            ? const CircularProgressIndicator()
-                            : AppButton(
-                                minimumSize: MaterialStateProperty.all(const Size(380, 50)),
-                                onPressed: () {
-                                  AuthCubit.get(context).forgotPassword(emailController.text.trim());
-                                },
-                                text: 'استعادة كلمة المرور',
-                              );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+         Container(
+           decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              Theme.of(context).scaffoldBackgroundColor == const Color(0xff191201)
+                  ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
+                  : 'assets/images/lightBg.png', // ✅ خلفية اللايت
             ),
+            fit: BoxFit.cover, // ✅ جعل الصورة تغطي الشاشة بالكامل
           ),
         ),
+           child: SingleChildScrollView(
+            child: AppPadding(
+              child: Center(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 30),
+                    const CustomHeaderRow(title: 'استعادة كلمة المرور'),
+                    SizedBox(height: 30.h),
+                    Center(
+                      child: Image.asset(
+                        AppImages.logoForgetPass,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    SizedBox(height: 20.h),
+                    const AppText(
+                      textAlign: TextAlign.center,
+                      text: 'ادخل البريد الالكتروني أو رقم الهاتف المربوط بحسابك لاستلام الرقم السري المؤقت',
+                    ),
+                    SizedBox(height: 40.h),
+                    CustomInputField(
+                      controller: emailController,  // 🔹 تأكد من ربط الكنترولر
+                      label: "البريد الإلكتروني",
+                      validator: xValidator([
+                        IsRequired('يرجى إدخال البريد الإلكتروني'),
+                      ]),
+                      onChanged: (value) {},
+                    ),
+                    const SizedBox(height: 30),
+                    Center(
+                      child: BlocConsumer<AuthCubit, AuthState>(
+                        listener: (context, state) {
+                          if (state is AuthSuccess) {
+                            context.pushReplacementNamed(AppRoutes.verificationPage,
+                            arguments:{"email": emailController.text.trim()} );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(state.message)),
+                            );
+                          } else if (state is AuthFailure) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(state.error)),
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          return state is AuthLoading
+                              ? const CircularProgressIndicator()
+                              : AppButton(
+                                  minimumSize: MaterialStateProperty.all(const Size(380, 50)),
+                                  onPressed: () {
+                                    AuthCubit.get(context).forgotPassword(emailController.text.trim());
+                                  },
+                                  text: 'استعادة كلمة المرور',
+                                );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+                   ),
+         ),
       ),
     );
   }
