@@ -22,7 +22,9 @@ class StoryDetailsPage extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: CustomDrawer(),
-      body: SingleChildScrollView(
+      body: 
+      
+      SingleChildScrollView(
         child:
             BlocBuilder<SingleDetailsCategoryCubit, SingleDetailsCategoryState>(
           builder: (context, state) {
@@ -50,8 +52,12 @@ class StoryDetailsPage extends StatelessWidget {
                                 context.read<ThemeCubit>().toggleTheme();
                               },
                               child: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
+                                decoration:  BoxDecoration(
+                                  color: Theme.of(context)
+                                       .scaffoldBackgroundColor ==
+                                     Color(0xff191201)
+                                                ? Color(0xff2b1e08)
+                                                : Colors.white,
                                   shape: BoxShape.circle,
                                 ),
                                 height: 40,
@@ -65,9 +71,13 @@ class StoryDetailsPage extends StatelessWidget {
                                 context.pushNamed(AppRoutes.notificationScreen);
                               },
                               child: Container(
-                                decoration: const BoxDecoration(
+                                decoration:  BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Colors.white,
+                                  color: Theme.of(context)
+                                       .scaffoldBackgroundColor ==
+                                     Color(0xff191201)
+                                                ? Color(0xff2b1e08)
+                                                : Colors.white,
                                 ),
                                 height: 40,
                                 width: 40,
@@ -80,11 +90,11 @@ class StoryDetailsPage extends StatelessWidget {
                         Row(
                           children: [
                             AppText(
+                              color: AppColors.primaryColor,
+
                               text: singleCategory.name ?? '',
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge
-                                  ?.copyWith(color: AppColors.primaryColor),
+                              fontSize: 18,
+                              
                             ),
                             const SizedBox(width: 10),
                             IconButton(

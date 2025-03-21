@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'notification.dart';
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
@@ -6,7 +7,9 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: 
+      
+      SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -22,8 +25,12 @@ class NotificationPage extends StatelessWidget {
 
                     },
                     child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
+                      decoration:  BoxDecoration(
+                        color: Theme.of(context)
+                                       .scaffoldBackgroundColor ==
+                                     Color(0xff191201)
+                                                ? Color(0xff2b1e08)
+                                                : Colors.white,
                         shape: BoxShape.circle,
                       ),
                       height: 40,
@@ -60,9 +67,11 @@ class NotificationPage extends StatelessWidget {
                     child: Container(
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
-                          color: Theme.of(context).scaffoldBackgroundColor == Colors.black
-                              ? Colors.grey[900]
-                              : Colors.white,
+                          color: Theme.of(context)
+                                       .scaffoldBackgroundColor ==
+                                     Color(0xff191201)
+                                                ? Color(0xff2b1e08)
+                                                : Colors.white,
                         ),
                         height: 70,
                         child: const Padding(

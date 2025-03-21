@@ -29,7 +29,8 @@ class _VerificationPageState extends State<VerificationPage> {
     return BlocProvider(
       create: (context) => AuthCubit(),
       child: Scaffold(
-        body: SingleChildScrollView(
+        body: 
+        SingleChildScrollView(
           child: AppPadding(
             child: Center(
               child: Column(

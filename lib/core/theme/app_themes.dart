@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stories_app/core/cache/preference_manager.dart';
 import 'package:stories_app/core/theme/widget_theme/text/text_theme.dart';
+
 import 'app_colors.dart';
 
 class AppThemes {
@@ -25,7 +26,7 @@ class AppThemes {
     iconTheme: const IconThemeData(color: Colors.white),
     primaryColor: AppColors.primaryColor,
     textTheme: TextThemes.dark,
-    scaffoldBackgroundColor: Colors.black,
+    scaffoldBackgroundColor: Color(0xff191201),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primaryColor,

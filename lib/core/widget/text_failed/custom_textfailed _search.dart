@@ -43,59 +43,68 @@ class _CustomTextFieldState extends State<CustomTextFieldSearch> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-
-      controller: widget.controller,
-      keyboardType: widget.keyboardType,
-      obscureText: widget.isPassword ? _obscureText : widget.obscureText,
-      onChanged: widget.onChanged,
-      decoration: InputDecoration(
-        prefixIcon: widget.prefixIcon,
-        suffixIcon: widget.suffixIcon,
-        errorText: widget.errorText == null || widget.errorText!.isEmpty
-            ? null
-            : widget.errorText,
-        hintText: widget.hintText,
-        hintStyle: const TextStyle(color: Colors.grey),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(
-            color: Colors.transparent,
-            width: 0.0,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(
-            color: Colors.grey,
-            width: 0.0,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(
-            color: Colors.grey,
-            width: 0.0,
-          ),
-        ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-        alignLabelWithHint: true,
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15.0),
+        color: Theme.of(context)
+            .scaffoldBackgroundColor ==
+            Color(0xff191201)
+            ? Color(0xff2b1e08)
+            : Colors.white,
       ),
-      textAlign: TextAlign.right,
-      // Display the text and icon inside the TextField
-      buildCounter: (context, {required currentLength, required isFocused, maxLength}) {
-        return widget.textWithIcon != null ? Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            widget.textWithIcon!,
-            const SizedBox(width: 8.0),
-            Text(
-              widget.hintText ?? '',
-              style: const TextStyle(color: Colors.grey),
+      child: TextField(
+        controller: widget.controller,
+        keyboardType: widget.keyboardType,
+        obscureText: widget.isPassword ? _obscureText : widget.obscureText,
+        onChanged: widget.onChanged,
+        decoration: InputDecoration(
+          prefixIcon: widget.prefixIcon,
+          suffixIcon: widget.suffixIcon,
+          errorText: widget.errorText == null || widget.errorText!.isEmpty
+              ? null
+              : widget.errorText,
+          hintText: widget.hintText,
+          hintStyle: const TextStyle(color: Colors.grey,fontFamily: "cairo"),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+              width: 0.0,
             ),
-          ],
-        ) : null;
-      },
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: const BorderSide(
+              color: Colors.grey,
+              width: 0.0,
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: const BorderSide(
+              color: Colors.grey,
+              width: 0.0,
+            ),
+          ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+          alignLabelWithHint: true,
+        ),
+        textAlign: TextAlign.right,
+        // Display the text and icon inside the TextField
+        buildCounter: (context, {required currentLength, required isFocused, maxLength}) {
+          return widget.textWithIcon != null ? Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              widget.textWithIcon!,
+              const SizedBox(width: 8.0),
+              Text(
+                widget.hintText ?? '',
+                style: const TextStyle(color: Colors.grey),
+              ),
+            ],
+          ) : null;
+        },
+      ),
     );
   }
 }

@@ -30,6 +30,7 @@ class TextPrompt extends StatelessWidget {
                 text: primaryText,
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   fontSize: 16,
+                  fontFamily: "cairo"
                 ),
               ),
               TextSpan(
@@ -38,6 +39,7 @@ class TextPrompt extends StatelessWidget {
                   fontSize: 16,
                   color: AppColors.primaryColor,
                   fontWeight: FontWeight.w400,
+                   fontFamily: "cairo"
                 ),
               ),
             ],

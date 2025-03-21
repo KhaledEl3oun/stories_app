@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stories_app/core/extension/navigator.dart';
 import 'package:stories_app/core/route/app_routes.dart';
@@ -14,28 +13,25 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeMode = context.watch<ThemeCubit>().state;
 
-    return Scaffold(
-      body: Drawer(
+    return Directionality(
+      textDirection: TextDirection.rtl, // ✅ جعل المحتوى يبدأ من اليمين
+      child: Drawer(
         backgroundColor:
-            Theme.of(context).scaffoldBackgroundColor == Colors.black
+            Theme.of(context).scaffoldBackgroundColor == Color(0xff191201)
                 ? Colors.grey[900]
                 : Colors.white,
         child: AppPadding(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end, // ✅ محاذاة للعناصر لليمين
             children: [
-              const SizedBox(
-                height: 30,
-              ),
+              const SizedBox(height: 30),
               Center(
                 child: Image.asset(
                     height: 40,
                     fit: BoxFit.cover,
                     'assets/images/logo_abc.png'),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               _buildDrawerItem('الرئيسية', Icons.home, context, () {
                 context.pushNamed(AppRoutes.homeScreen);
               }),
@@ -57,22 +53,9 @@ class CustomDrawer extends StatelessWidget {
                 context.pushNamed(AppRoutes.rateAppPage);
               }),
               const Divider(),
-              _buildDrawerItem('سياسة الخصوصية', Icons.privacy_tip, context,
-                  () {
+              _buildDrawerItem('سياسة الخصوصية', Icons.privacy_tip, context, () {
                 context.pushNamed(AppRoutes.privacyPolicyPage);
               }),
-              // const Divider(),
-              //
-              // AdvancedSwitch(
-              //   activeColor: Colors.green,
-              //   inactiveColor: Colors.grey,
-              //   borderRadius: const BorderRadius.all(Radius.circular(15)),
-              //   width: 41.0,
-              //   height: 25.0,
-              //   enabled: true,
-              //   disabledOpacity: 0.5,
-              //   onChanged: (value) {},
-              // ),
               const Divider(),
               _buildDrawerItem('تسجيل الخروج', Icons.logout, context, () {
                 AuthCubit().logout(context);
@@ -92,7 +75,7 @@ class CustomDrawer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end, // ✅ يجعل الأيقونة قبل النص
           children: [
             AppText(
                 text: title, textStyle: Theme.of(context).textTheme.bodyLarge),

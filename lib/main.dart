@@ -33,18 +33,10 @@ void main() async {
       providers: [
         BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
         BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
-        BlocProvider<CategoryCubit>(
-          create: (context) => CategoryCubit()..fetchCategoriesAndStories(),
-        ),
-        BlocProvider<SubCategoryCubit>(
-          create: (context) => SubCategoryCubit(),
-        ),
-        BlocProvider<SingleDetailsCategoryCubit>(
-          create: (context) => SingleDetailsCategoryCubit(),
-        ),
-        BlocProvider<FavoriteCubit>(
-          create: (context) => FavoriteCubit()..fetchGetAllFavorite(),
-        ),
+        BlocProvider<CategoryCubit>(create: (context) => CategoryCubit()..fetchCategoriesAndStories()),
+        BlocProvider<SubCategoryCubit>(create: (context) => SubCategoryCubit(),),
+        BlocProvider<SingleDetailsCategoryCubit>(create: (context) => SingleDetailsCategoryCubit(),),
+        BlocProvider<FavoriteCubit>(create: (context) => FavoriteCubit()..fetchGetAllFavorite(),),
         //
       ],
       child: const MyApp(),

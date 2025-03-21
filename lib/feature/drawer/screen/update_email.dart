@@ -15,7 +15,9 @@ class UpdateEmail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: CustomDrawer(),
-      body: SingleChildScrollView(
+      body: 
+      
+      SingleChildScrollView(
         child: AppPadding(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,

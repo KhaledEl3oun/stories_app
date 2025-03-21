@@ -31,7 +31,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
     return BlocProvider(
       create: (context) => AuthCubit(),
       child: Scaffold(
-        body: SingleChildScrollView(
+        
+        body:
+         SingleChildScrollView(
           child: AppPadding(
             child: Center(
               child: Column(

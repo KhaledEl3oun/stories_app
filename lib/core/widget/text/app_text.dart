@@ -7,6 +7,9 @@ class AppText extends StatelessWidget {
   final bool? softWrap;
   final TextOverflow? overflow;
   final int? maxLines;
+  final double? fontSize;
+  final FontWeight? fontWeight;
+  final Color?color;
 
   const AppText({
     super.key,
@@ -16,6 +19,9 @@ class AppText extends StatelessWidget {
     this.softWrap,
     this.overflow,
     this.maxLines,
+     this.fontSize,
+     this.fontWeight,
+    this.color,
   });
 
   @override
@@ -23,10 +29,16 @@ class AppText extends StatelessWidget {
     return Text(
       text,
       textAlign: textAlign ?? TextAlign.end,
-      style: textStyle ?? Theme.of(context).textTheme.bodyLarge, // ✅ يحصل على الثيم المحدث
+      style: TextStyle(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+        fontFamily: "Cairo",
+      ), // ✅ يحصل على الثيم المحدث
       softWrap: softWrap,
       overflow: overflow,
       maxLines: maxLines,
+    
     );
   }
 }

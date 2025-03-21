@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stories_app/core/widget/text/app_text.dart';
+import 'package:stories_app/feature/drawer/drawer_page.dart';
 import 'package:stories_app/feature/home/views/widget/custom_row_header.dart';
 
 class PrivacyPolicyPage extends StatefulWidget {
@@ -14,7 +15,11 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      key: _scaffoldKey,
+      endDrawer: CustomDrawer(),
+      body: 
+      
+      SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

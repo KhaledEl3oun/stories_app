@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stories_app/core/extension/navigator.dart';
 import 'package:stories_app/core/route/app_routes.dart';
@@ -15,14 +14,16 @@ import '../controller/cubit/favorite_cubit.dart';
 
 class FavoritePage extends StatelessWidget {
   FavoritePage({super.key});
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     final favoriteCubit = context.watch<FavoriteCubit>();
     return Scaffold(
-      key: _scaffoldKey,
+      key: scaffoldKey,
       endDrawer: CustomDrawer(),
-      body: RefreshIndicator(
+      body: 
+      
+      RefreshIndicator(
         onRefresh: () async {
           context.read<FavoriteCubit>().fetchGetAllFavorite();
         },
@@ -42,8 +43,12 @@ class FavoritePage extends StatelessWidget {
                             context.read<ThemeCubit>().toggleTheme();
                           },
                           child: Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
+                            decoration:  BoxDecoration(
+                              color: Theme.of(context)
+                                                        .scaffoldBackgroundColor ==
+                                                    Color(0xff191201)
+                                                ? Color(0xff2b1e08)
+                                                : Colors.white,
                               shape: BoxShape.circle,
                             ),
                             height: 40,
@@ -57,9 +62,13 @@ class FavoritePage extends StatelessWidget {
                             context.pushNamed(AppRoutes.notificationScreen);
                           },
                           child: Container(
-                            decoration: const BoxDecoration(
+                            decoration:  BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.white,
+                              color: Theme.of(context)
+                                                        .scaffoldBackgroundColor ==
+                                                    Color(0xff191201)
+                                                ? Color(0xff2b1e08)
+                                                : Colors.white,
                             ),
                             height: 40,
                             width: 40,
@@ -81,9 +90,9 @@ class FavoritePage extends StatelessWidget {
                         const SizedBox(width: 10),
                         IconButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              scaffoldKey.currentState?.openEndDrawer();
                             },
-                            icon: const Icon(Icons.arrow_forward))
+                            icon: const Icon(Icons.menu_rounded)),
                       ],
                     ),
                   ],

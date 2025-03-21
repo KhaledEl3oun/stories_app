@@ -35,7 +35,8 @@ class _LoginPageState extends State<LoginPage> {
     return BlocProvider(
       create: (context) => AuthCubit(),
       child: Scaffold(
-        body: AppPadding(
+        body: 
+        AppPadding(
           child: Center(
             child: SingleChildScrollView(
               child: Column(
@@ -103,7 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                     listener: (context, state) {
                       if (state is AuthLoggedIn) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("تم تسجيل الدخول بنجاح!")),
+                          SnackBar(content: Text("تم تسجيل الدخول بنجاح!",
+                          style: TextStyle(color: Colors.green,fontFamily: 'cairo'),)),
                         );
                         Future.microtask(() {
                           context.pushNamed(AppRoutes.homeScreen);

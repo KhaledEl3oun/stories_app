@@ -14,7 +14,8 @@ class ComplatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body:
+       SingleChildScrollView(
         child: AppPadding(
           child: Column(
             children: [

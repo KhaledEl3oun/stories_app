@@ -37,7 +37,8 @@ class _RegisterPageState extends State<RegisterPage> {
     return BlocProvider(
       create: (context) => AuthCubit(),
       child: Scaffold(
-        body: AppPadding(
+        body: 
+        AppPadding(
           child: Center(
             child: SingleChildScrollView(
               child: Column(
