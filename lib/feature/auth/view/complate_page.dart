@@ -14,36 +14,49 @@ class ComplatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: AppPadding(
-          child: Column(
-            children: [
-              const SizedBox(height: 30,),
-              const CustomHeaderRow(title: 'استعاده كلمه المرور',),
-              Center(
-                child: Image.asset(
-                  AppImages.complatePass,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(height: 20.h),
-              const Center(
-                child: AppText(text: 'تم استعادة كلمة المرور بنجاح'),
-              ),
-              SizedBox(height: 40.h),
-              Center(
-                child: AppButton(
-                  minimumSize: MaterialStateProperty.all(Size(380.w, 50.h)),
-                  onPressed: () {
-                    context.pushNamed(AppRoutes.loginScreen);
-                  },
-                  text: 'تسجيل الدخول',
-                ),
-              ),
-            ],
+      body:
+       Container(
+         decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              Theme.of(context).scaffoldBackgroundColor == const Color(0xff191201)
+                  ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
+                  : 'assets/images/lightBg.png', // ✅ خلفية اللايت
+            ),
+            fit: BoxFit.cover, // ✅ جعل الصورة تغطي الشاشة بالكامل
           ),
         ),
-      ),
+         child: SingleChildScrollView(
+          child: AppPadding(
+            child: Column(
+              children: [
+                const SizedBox(height: 30,),
+                const CustomHeaderRow(title: 'استعاده كلمه المرور',),
+                Center(
+                  child: Image.asset(
+                    AppImages.complatePass,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                const Center(
+                  child: AppText(text: 'تم استعادة كلمة المرور بنجاح'),
+                ),
+                SizedBox(height: 40.h),
+                Center(
+                  child: AppButton(
+                    minimumSize: MaterialStateProperty.all(Size(380.w, 50.h)),
+                    onPressed: () {
+                      context.pushNamed(AppRoutes.loginScreen);
+                    },
+                    text: 'تسجيل الدخول',
+                  ),
+                ),
+              ],
+            ),
+          ),
+               ),
+       ),
     );
   }
 }

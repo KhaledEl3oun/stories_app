@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:stories_app/core/theme/app_colors.dart';
-import '../text/app_text.dart';
 
 class AppButton extends StatelessWidget {
   final Function()? onPressed;
@@ -53,6 +52,7 @@ class AppButton extends StatelessWidget {
         style:textStyle?? Theme.of(context).textTheme.bodyLarge?.copyWith(
           color: textColor ?? Colors.white,
           fontSize: 18,
+           fontFamily: "cairo"
         ),
       ),
     );

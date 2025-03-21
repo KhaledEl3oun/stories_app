@@ -22,7 +22,9 @@ class StoryPage extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: CustomDrawer(),
-      body: SingleChildScrollView(
+      body: 
+      
+      SingleChildScrollView(
         child: AppPadding(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -38,8 +40,12 @@ class StoryPage extends StatelessWidget {
                           context.read<ThemeCubit>().toggleTheme();
                         },
                         child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
+                          decoration:  BoxDecoration(
+                            color: Theme.of(context)
+                                       .scaffoldBackgroundColor ==
+                                     Color(0xff191201)
+                                                ? Color(0xff2b1e08)
+                                                : Colors.white,
                             shape: BoxShape.circle,
                           ),
                           height: 40,
@@ -53,9 +59,13 @@ class StoryPage extends StatelessWidget {
                           context.pushNamed(AppRoutes.notificationScreen);
                         },
                         child: Container(
-                          decoration: const BoxDecoration(
+                          decoration:  BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white,
+                            color: Theme.of(context)
+                                       .scaffoldBackgroundColor ==
+                                     Color(0xff191201)
+                                                ? Color(0xff2b1e08)
+                                                : Colors.white,
                           ),
                           height: 40,
                           width: 40,
@@ -133,8 +143,8 @@ class StoryPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               color:
                                   Theme.of(context).scaffoldBackgroundColor ==
-                                          Colors.black
-                                      ? Colors.grey[900]
+                                          Color(0xff191201)
+                                      ? Color(0xff2b1e08)
                                       : Colors.white,
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -171,8 +181,7 @@ class StoryPage extends StatelessWidget {
                                       AppText(
                                         text: state.subCategories[index].name ??
                                             '',
-                                        textStyle:
-                                            const TextStyle(fontSize: 16),
+                                       color: AppColors.primaryColor,
                                       ),
                                     ],
                                   ),

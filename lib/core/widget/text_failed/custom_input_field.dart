@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:stories_app/core/theme/app_colors.dart';
 import 'package:stories_app/core/widget/text_failed/custom_text_failed.dart';
 
@@ -38,7 +37,12 @@ class CustomInputField extends StatelessWidget {
         Text(
         textAlign: TextAlign.start,
         label,
-        style: Theme.of(context).textTheme.bodyLarge
+        style: TextStyle(
+          color: AppColors.primaryColor,
+          fontFamily: "Cairo",
+          fontSize: 16.sp,
+          fontWeight: FontWeight.w600,
+        ),
     ),
         SizedBox(height: 10),
         CustomTextField(

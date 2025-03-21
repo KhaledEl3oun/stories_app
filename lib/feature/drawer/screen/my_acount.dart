@@ -16,7 +16,8 @@ class MyAccount extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: CustomDrawer(),
-      body: SingleChildScrollView(
+      body:
+       SingleChildScrollView(
         child: AppPadding(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,

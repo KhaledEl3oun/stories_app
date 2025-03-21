@@ -18,11 +18,8 @@ class CustomHeaderRow extends StatelessWidget {
       children: [
         AppText(
           text: title,
-          textStyle: Theme.of(context)
-              .textTheme
-              .bodyLarge
-              ?.copyWith(
-              color: AppColors.primaryColor, fontSize: 18),
+          color: AppColors.primaryColor,
+          fontSize: 20,
         ),
         IconButton(
           onPressed: () => Navigator.pop(context),
