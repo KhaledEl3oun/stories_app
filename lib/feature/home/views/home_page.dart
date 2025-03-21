@@ -10,6 +10,7 @@ import 'package:stories_app/feature/home/controller/category_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stories_app/feature/home/controller/sub_category_cubit.dart';
 
+import '../controller/single_details_story_cubit.dart';
 import 'home.dart';
 
 class HomePage extends StatefulWidget {
@@ -192,7 +193,7 @@ class _HomePageState extends State<HomePage> {
                                       },
                                       child: Container(
                                         padding: const EdgeInsets.all(8),
-                                        width: 120, // ✅ تأكد من تحديد عرض مناسب
+                                        width: 120,
                                         decoration: BoxDecoration(
                                           color: Theme.of(context)
                                                       .scaffoldBackgroundColor ==
@@ -272,61 +273,75 @@ class _HomePageState extends State<HomePage> {
                               ),
                               itemBuilder: (context, index) {
                                 final story = state.stories[index];
-                                return Container(
-                                  padding: EdgeInsets.all(8),
-                                  height: 290,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                                .scaffoldBackgroundColor ==
-                                            Colors.black
-                                        ? Colors.grey[900]
-                                        : Colors.white,
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 120.h,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                                      .scaffoldBackgroundColor ==
-                                                  Colors.black
-                                              ? Colors.grey[800]
-                                              : Colors.white,
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(16),
-                                              topRight: Radius.circular(16),
-                                              bottomLeft: Radius.circular(16),
-                                              bottomRight: Radius.circular(16)),
-                                          image: DecorationImage(
-                                            image:
-                                                NetworkImage(story.imageCover),
-                                            fit: BoxFit.cover,
-                                            onError: (exception, stackTrace) {
-                                              print(
-                                                  "❌ فشل تحميل صورة القصة: ${story.imageCover}");
-                                            },
+                                return GestureDetector(
+                                  onTap: () {
+                                    context.pushNamed(
+                                      AppRoutes.storyDetailsPage,
+                                    );
+                                    context
+                                        .read<DetailsStoryCubit>()
+                                        .fetchSingleStory(
+                                          story.id,
+                                        );
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(8),
+                                    height: 290,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                                  .scaffoldBackgroundColor ==
+                                              Colors.black
+                                          ? Colors.grey[900]
+                                          : Colors.white,
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 120.h,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                        .scaffoldBackgroundColor ==
+                                                    Colors.black
+                                                ? Colors.grey[800]
+                                                : Colors.white,
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                                topLeft: Radius.circular(16),
+                                                topRight: Radius.circular(16),
+                                                bottomLeft: Radius.circular(16),
+                                                bottomRight:
+                                                    Radius.circular(16)),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                  story.imageCover),
+                                              fit: BoxFit.cover,
+                                              onError: (exception, stackTrace) {
+                                                print(
+                                                    "❌ فشل تحميل صورة القصة: ${story.imageCover}");
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            story.title,
-                                            style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              story.title,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Gap(5.h),
-                                        ],
-                                      ),
-                                    ],
+                                            Gap(5.h),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },

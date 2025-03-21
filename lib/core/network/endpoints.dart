@@ -11,8 +11,20 @@ class Endpoints {
     return '/api/v1/categories/$id/subcategories';
   }
 
-  static String singleCategory(String id) {
-    return '/api/v1/subCategories/$id';
+  static String markStoryAsRead(String id) {
+    return '/api/v1/story/$id/mark-as-read';
+  }
+
+  static String markStoryUnRead(String id) {
+    return '/api/v1/story/$id/unmark-as-read';
+  }
+
+  static String substory(String id) {
+    return '/api/v1/subCategories/$id/stories';
+  }
+
+  static String singleStory(String id) {
+    return '/api/v1/story/$id';
   }
 
   static const String story = '/api/v1/story?sort=latest';

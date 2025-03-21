@@ -10,7 +10,8 @@ import 'package:stories_app/core/widget/app_padding/app_padding.dart';
 import 'package:stories_app/core/widget/text/app_text.dart';
 import 'package:stories_app/feature/drawer/drawer_page.dart';
 import 'package:stories_app/feature/favorite/controller/cubit/favorite_cubit.dart';
-import 'package:stories_app/feature/home/controller/single_details_category_cubit.dart';
+import 'package:stories_app/feature/home/controller/reed_un_reed_story_cubit.dart';
+import 'package:stories_app/feature/home/controller/single_details_story_cubit.dart';
 
 import '../../../core/widget/Custom_app_image.dart';
 
@@ -23,18 +24,17 @@ class StoryDetailsPage extends StatelessWidget {
       key: _scaffoldKey,
       endDrawer: CustomDrawer(),
       body: SingleChildScrollView(
-        child:
-            BlocBuilder<SingleDetailsCategoryCubit, SingleDetailsCategoryState>(
+        child: BlocBuilder<DetailsStoryCubit, DetailsStoryState>(
           builder: (context, state) {
-            if (state is SingleDetailsCategoryLoading) {
+            if (state is DetailsStoryLoading) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Center(child: CircularProgressIndicator()),
                 ],
               );
-            } else if (state is SingleDetailsCategorySuccess) {
-              final singleCategory = state.singleCategory;
+            } else if (state is DetailsStorySuccess) {
+              final singleStory = state.singleCategory;
               return AppPadding(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -80,7 +80,7 @@ class StoryDetailsPage extends StatelessWidget {
                         Row(
                           children: [
                             AppText(
-                              text: singleCategory.name ?? '',
+                              text: singleStory.title ?? '',
                               textStyle: Theme.of(context)
                                   .textTheme
                                   .bodyLarge
@@ -96,42 +96,100 @@ class StoryDetailsPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
+                    const SizedBox(height: 10),
+                    BlocConsumer<ReedUnReedStoryCubit, ReedUnReedStoryState>(
+                      listener: (context, state) {
+                        if (state is ReedUnReedStorySuccess) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: AppText(
+                                text: 'تمت القراءة',
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
+                          );
+                        } else if (state is ReedUnReedStoryFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: AppText(
+                                text: state.error,
+                                textStyle:
+                                    Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        return GestureDetector(
+                          onTap: () {
+                            if (singleStory.isRead == true) {
+                              context
+                                  .read<ReedUnReedStoryCubit>()
+                                  .markStoryUnRead(singleStory.id ?? '');
+                            } else {
+                              context
+                                  .read<ReedUnReedStoryCubit>()
+                                  .markStoryAsRead(singleStory.id ?? '');
+                            }
+                            if (state is ReedUnReedStorySuccess) {
+                              Future.delayed(Duration(seconds: 5), () {
+                                Navigator.pop(context);
+                              });
+                            }
+                          },
+                          child: state is ReedUnReedStoryLoading
+                              ? CircularProgressIndicator()
+                              : Container(
+                                  padding: const EdgeInsets.all(5),
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 1,
+                                          color: singleStory.isRead == true
+                                              ? Colors.green
+                                              : Colors.grey),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      AppText(
+                                          text: 'تمت القراءة',
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                  fontSize: 16,
+                                                  color:
+                                                      singleStory.isRead == true
+                                                          ? Colors.green
+                                                          : Colors.grey)),
+                                      Icon(
+                                        Icons.check_circle,
+                                        color: singleStory == true
+                                            ? Colors.green
+                                            : Colors.grey,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                        );
+                      },
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      width: 120,
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Colors.grey),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          AppText(
-                              text: 'تمت القراءة',
-                              textStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyLarge!
-                                  .copyWith(fontSize: 16)),
-                          Icon(
-                            Icons.check_circle,
-                            color: Colors.grey,
-                          ),
-                        ],
-                      ),
-                    ),
+                    const SizedBox(height: 10),
                     Container(
                       height: MediaQuery.of(context).size.height * 0.5,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         image: DecorationImage(
-                          image: NetworkImage(singleCategory.image ?? ''),
+                          image: NetworkImage(singleStory.imageCover ?? ''),
                           fit: BoxFit.cover,
                           onError: (exception, stackTrace) {
                             print(
-                                "❌ فشل تحميل صورة الفئة: ${singleCategory.image}");
+                                "❌ فشل تحميل صورة الفئة: ${singleStory.imageCover}");
                           },
                         ),
                       ),
@@ -186,7 +244,7 @@ class StoryDetailsPage extends StatelessWidget {
                           onTap: () {
                             context
                                 .read<FavoriteCubit>()
-                                .addFavorite(singleCategory.id ?? '');
+                                .addFavorite(singleStory.id ?? '');
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -206,7 +264,7 @@ class StoryDetailsPage extends StatelessWidget {
                   ],
                 ),
               );
-            } else if (state is SingleDetailsCategoryFailure) {
+            } else if (state is DetailsStoryFailure) {
               return Center(
                 child: AppText(
                   text: state.message,

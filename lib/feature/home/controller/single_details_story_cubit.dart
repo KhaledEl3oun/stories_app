@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:stories_app/feature/home/model/single_details_category.dart';
+import 'package:stories_app/feature/home/model/single_details_story.dart';
 
 import '../../../core/network/dio_helper.dart';
 import '../../../core/network/endpoints.dart';
@@ -10,30 +10,30 @@ import '../../../core/network/endpoints.dart';
 // import 'package:permission_handler/permission_handler.dart';
 // import 'package:dio/dio.dart'; // إضافة dio
 
-part 'single_details_category_state.dart';
+part 'single_details_story_state.dart';
 
-class SingleDetailsCategoryCubit extends Cubit<SingleDetailsCategoryState> {
-  SingleDetailsCategoryCubit() : super(SingleDetailsCategoryInitial());
+class DetailsStoryCubit extends Cubit<DetailsStoryState> {
+  DetailsStoryCubit() : super(SingleDetailsCategoryInitial());
 
-  SingleCategoryModel? subCategory;
+  SingleStoryModel? subCategory;
 
-  Future<void> fetchSingleCategory(String id) async {
-    emit(SingleDetailsCategoryLoading());
+  Future<void> fetchSingleStory(String id) async {
+    emit(DetailsStoryLoading());
     try {
       // ✅ تحميل الفئة الفرعية من API
       final response =
-          await DioHelper.getData(url: Endpoints.singleCategory(id));
+          await DioHelper.getData(url: Endpoints.singleStory(id));
       print("✅ الفئة الفرعية المستلمة من API: ${response.data}");
 
       if (response.statusCode == 200 && response.data['data'] != null) {
-        subCategory = SingleCategoryModel.fromJson(response.data['data']);
-        emit(SingleDetailsCategorySuccess(subCategory!));
+        subCategory = SingleStoryModel.fromJson(response.data['data']);
+        emit(DetailsStorySuccess(subCategory!));
       } else {
-        emit(SingleDetailsCategoryFailure('❌ خطأ أثناء تحميل الفئة الفرعية'));
+        emit(DetailsStoryFailure('❌ خطأ أثناء تحميل الفئة الفرعية'));
       }
     } catch (e) {
       print("❌ فشل الاتصال بالسيرفر: $e");
-      emit(SingleDetailsCategoryFailure("فشل الاتصال بالسيرفر"));
+      emit(DetailsStoryFailure("فشل الاتصال بالسيرفر"));
     }
   }
 

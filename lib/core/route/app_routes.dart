@@ -28,8 +28,8 @@ class AppRoutes {
   static const String rateAppPage = '/rateAppPage';
   static const String privacyPolicyPage = '/privacyPolicyPage';
   static const String storyPage = '/storyPage';
+  static const String subStoryPage = '/subStoryPage';
   static const String storyDetailsPage = '/storyDetailsPage';
-
 
   /// 🔹 **Requests Screens**
   static const String requestsDetailsScreen = '/requestsDetailsScreen';
