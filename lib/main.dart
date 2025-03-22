@@ -10,10 +10,14 @@ import 'package:stories_app/core/route/route_generate.dart';
 import 'package:stories_app/core/theme/app_themes.dart';
 import 'package:stories_app/core/theme/cubit/theme_cubit.dart';
 import 'package:stories_app/feature/auth/controller/auth_cubit.dart';
+import 'package:stories_app/feature/drawer/controller/rat_application_cubit.dart';
+import 'package:stories_app/feature/drawer/controller/update_user_cubit.dart';
 import 'package:stories_app/feature/favorite/controller/cubit/favorite_cubit.dart';
 import 'package:stories_app/feature/home/controller/category_cubit.dart';
-import 'package:stories_app/feature/home/controller/single_details_category_cubit.dart';
+import 'package:stories_app/feature/home/controller/reed_un_reed_story_cubit.dart';
+import 'package:stories_app/feature/home/controller/single_details_story_cubit.dart';
 import 'package:stories_app/feature/home/controller/sub_category_cubit.dart';
+import 'package:stories_app/feature/home/controller/sub_story_cubit.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // هذا يعمل عندما يكون التطبيق في الخلفية أو مغلق
@@ -33,10 +37,30 @@ void main() async {
       providers: [
         BlocProvider<ThemeCubit>(create: (context) => ThemeCubit()),
         BlocProvider<AuthCubit>(create: (context) => AuthCubit()),
-        BlocProvider<CategoryCubit>(create: (context) => CategoryCubit()..fetchCategoriesAndStories()),
-        BlocProvider<SubCategoryCubit>(create: (context) => SubCategoryCubit(),),
-        BlocProvider<SingleDetailsCategoryCubit>(create: (context) => SingleDetailsCategoryCubit(),),
-        BlocProvider<FavoriteCubit>(create: (context) => FavoriteCubit()..fetchGetAllFavorite(),),
+        BlocProvider<CategoryCubit>(
+          create: (context) => CategoryCubit()..fetchCategoriesAndStories(),
+        ),
+        BlocProvider<SubCategoryCubit>(
+          create: (context) => SubCategoryCubit(),
+        ),
+        BlocProvider<DetailsStoryCubit>(
+          create: (context) => DetailsStoryCubit(),
+        ),
+        BlocProvider<SubStoryCubit>(
+          create: (context) => SubStoryCubit(),
+        ),
+        BlocProvider<RatApplicationCubit>(
+          create: (context) => RatApplicationCubit(),
+        ),
+        BlocProvider<UpdateUserCubit>(
+          create: (context) => UpdateUserCubit(),
+        ),
+        BlocProvider<ReedUnReedStoryCubit>(
+          create: (context) => ReedUnReedStoryCubit(),
+        ),
+        BlocProvider<FavoriteCubit>(
+          create: (context) => FavoriteCubit()..fetchGetAllFavorite(),
+        ),
         //
       ],
       child: const MyApp(),

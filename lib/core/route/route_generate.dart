@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:stories_app/feature/auth/view/change_password_page.dart';
 import 'package:stories_app/feature/auth/view/complate_page.dart';
@@ -22,6 +21,7 @@ import 'package:stories_app/feature/notification/views/notification_page.dart';
 import 'package:stories_app/feature/on_boarding/on_boarding_page.dart';
 import 'package:stories_app/feature/on_boarding/on_boarding_page2.dart';
 import 'package:stories_app/feature/splash/splash_page.dart';
+import '../../feature/home/views/sub_story_page.dart';
 import 'app_routes.dart';
 
 class RouteGenerator {
@@ -41,38 +41,41 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ForgetPasswordPage());
       case AppRoutes.verificationPage:
         final args = settings.arguments as Map<String, dynamic>?;
-        final email = args?["email"]?? "";
-        return MaterialPageRoute(builder: (_) =>  VerificationPage(email: email));
+        final email = args?["email"] ?? "";
+        return MaterialPageRoute(
+            builder: (_) => VerificationPage(email: email));
       case AppRoutes.changePasswordPage:
         return MaterialPageRoute(builder: (_) => const ChangePasswordPage());
       case AppRoutes.complatePage:
         return MaterialPageRoute(builder: (_) => const ComplatePage());
       case AppRoutes.homeScreen:
-        return MaterialPageRoute(builder: (_) =>  HomePage());
+        return MaterialPageRoute(builder: (_) => HomePage());
       case AppRoutes.notificationScreen:
         return MaterialPageRoute(builder: (_) => const NotificationPage());
       case AppRoutes.myAccount:
-        return MaterialPageRoute(builder: (_) =>  MyAccount());
+        return MaterialPageRoute(builder: (_) => MyAccount());
       case AppRoutes.updateName:
-        return MaterialPageRoute(builder: (_) =>  UpdateName());
+        return MaterialPageRoute(builder: (_) => UpdateName());
       case AppRoutes.updateEmail:
-        return MaterialPageRoute(builder: (_) =>  UpdateEmail());
+        return MaterialPageRoute(builder: (_) => UpdateEmail());
       case AppRoutes.updatePhone:
-        return MaterialPageRoute(builder: (_) =>  UpdatePhone());
+        return MaterialPageRoute(builder: (_) => UpdatePhone());
       case AppRoutes.updatePassword:
-        return MaterialPageRoute(builder: (_) =>  UpdatePassword());
+        return MaterialPageRoute(builder: (_) => UpdatePassword());
       case AppRoutes.favoriteScreen:
-        return MaterialPageRoute(builder: (_) =>  FavoritePage());
+        return MaterialPageRoute(builder: (_) => FavoritePage());
       case AppRoutes.supportPage:
-        return MaterialPageRoute(builder: (_) =>  SupportPage());
+        return MaterialPageRoute(builder: (_) => SupportPage());
       case AppRoutes.rateAppPage:
-        return MaterialPageRoute(builder: (_) =>  RateAppPage());
+        return MaterialPageRoute(builder: (_) => RateAppPage());
       case AppRoutes.privacyPolicyPage:
-        return MaterialPageRoute(builder: (_) =>  PrivacyPolicyPage());
+        return MaterialPageRoute(builder: (_) => PrivacyPolicyPage());
       case AppRoutes.storyPage:
-        return MaterialPageRoute(builder: (_) =>  StoryPage());
+        return MaterialPageRoute(builder: (_) => StoryPage());
+      case AppRoutes.subStoryPage:
+        return MaterialPageRoute(builder: (_) => SubStoryPage());
       case AppRoutes.storyDetailsPage:
-        return MaterialPageRoute(builder: (_) =>  StoryDetailsPage());
+        return MaterialPageRoute(builder: (_) => StoryDetailsPage());
       default:
         return _unDefinedRoute();
     }

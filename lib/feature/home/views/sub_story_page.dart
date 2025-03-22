@@ -3,18 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stories_app/core/extension/navigator.dart';
 import 'package:stories_app/core/route/app_routes.dart';
-import 'package:stories_app/core/theme/app_colors.dart';
 import 'package:stories_app/core/theme/cubit/theme_cubit.dart';
 import 'package:stories_app/core/widget/app_padding/app_padding.dart';
 import 'package:stories_app/core/widget/text/app_text.dart';
 import 'package:stories_app/core/widget/text_failed/custom_textfailed%20_search.dart';
 import 'package:stories_app/feature/drawer/drawer_page.dart';
+import 'package:stories_app/feature/home/controller/single_details_story_cubit.dart';
 import 'package:stories_app/feature/home/controller/sub_story_cubit.dart';
 import '../../../core/widget/custom_app_image.dart';
 import '../controller/sub_category_cubit.dart';
 
-class StoryPage extends StatelessWidget {
-  StoryPage({super.key});
+class SubStoryPage extends StatelessWidget {
+  SubStoryPage({super.key});
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -39,11 +39,8 @@ class StoryPage extends StatelessWidget {
                           context.read<ThemeCubit>().toggleTheme();
                         },
                         child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).scaffoldBackgroundColor ==
-                                    Color(0xff191201)
-                                ? Color(0xff2b1e08)
-                                : Colors.white,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
                             shape: BoxShape.circle,
                           ),
                           height: 40,
@@ -57,12 +54,9 @@ class StoryPage extends StatelessWidget {
                           context.pushNamed(AppRoutes.notificationScreen);
                         },
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Theme.of(context).scaffoldBackgroundColor ==
-                                    Color(0xff191201)
-                                ? Color(0xff2b1e08)
-                                : Colors.white,
+                            color: Colors.white,
                           ),
                           height: 40,
                           width: 40,
@@ -95,21 +89,21 @@ class StoryPage extends StatelessWidget {
                 controller: subCategoryCubit.searchController,
               ),
               const SizedBox(height: 10),
-              BlocBuilder<SubCategoryCubit, SubCategoryState>(
+              BlocBuilder<SubStoryCubit, SubStoryState>(
                 builder: (context, state) {
                   if (state is SubCategoryLoading) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
-                  } else if (state is SubCategoryFailure) {
+                  } else if (state is SubStoryFailure) {
                     return Center(
                       child: AppText(
                         text: state.message,
                         textStyle: Theme.of(context).textTheme.bodyLarge,
                       ),
                     );
-                  } else if (state is SubCategorySuccess) {
-                    if (state.subCategories.isEmpty) {
+                  } else if (state is SubStorySuccess) {
+                    if (state.subStoryModel.isEmpty) {
                       return Center(
                         child: AppText(
                           text: 'لا يوجد بيانات',
@@ -120,7 +114,7 @@ class StoryPage extends StatelessWidget {
                     return GridView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: state.subCategories.length,
+                      itemCount: state.subStoryModel.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -131,17 +125,17 @@ class StoryPage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
-                            context.pushNamed(AppRoutes.subStoryPage);
-                            context.read<SubStoryCubit>().fetchSubStory(
-                                  state.subCategories[index].id ?? '',
+                            context.pushNamed(AppRoutes.storyDetailsPage);
+                            context.read<DetailsStoryCubit>().fetchSingleStory(
+                                  state.subStoryModel[index].id ?? '',
                                 );
                           },
                           child: Container(
                             decoration: BoxDecoration(
                               color:
                                   Theme.of(context).scaffoldBackgroundColor ==
-                                          Color(0xff191201)
-                                      ? Color(0xff2b1e08)
+                                          Colors.black
+                                      ? Colors.grey[900]
                                       : Colors.white,
                               borderRadius: BorderRadius.circular(16),
                             ),
@@ -164,21 +158,36 @@ class StoryPage extends StatelessWidget {
                                               BorderRadius.circular(16),
                                           image: DecorationImage(
                                             image: NetworkImage(state
-                                                    .subCategories[index]
-                                                    .image ??
+                                                    .subStoryModel[index]
+                                                    .imageCover ??
                                                 ''),
                                             fit: BoxFit.cover,
                                             onError: (exception, stackTrace) {
                                               print(
-                                                  "❌ فشل تحميل صورة الفئة: ${state.subCategories[index].image}");
+                                                  "❌ فشل تحميل صورة الفئة: ${state.subStoryModel[index].imageCover}");
                                             },
                                           ),
                                         ),
                                       ),
-                                      AppText(
-                                        text: state.subCategories[index].name ??
-                                            '',
-                                        color: AppColors.primaryColor,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          if (state.subStoryModel[index]
+                                                  .isRead ==
+                                              true)
+                                            Icon(
+                                              Icons.check_circle,
+                                              color: Colors.green,
+                                            ),
+                                          AppText(
+                                            text: state.subStoryModel[index]
+                                                    .title ??
+                                                '',
+                                            textStyle:
+                                                const TextStyle(fontSize: 16),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),

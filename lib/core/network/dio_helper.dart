@@ -35,8 +35,18 @@ class DioHelper {
   static Future<Response> putData({
     required String url,
     required Map<String, dynamic> data,
+    Map<String, dynamic>? headers,
   }) async {
-    return await dio.put(url, data: data);
+    return await dio.put(url, data: data, options: Options(headers: headers));
+  }
+
+  // 🟠 طلب **patch** لتحديث البيانات
+  static Future<Response> patchData({
+    required String url,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? headers,
+  }) async {
+    return await dio.patch(url, data: data, options: Options(headers: headers));
   }
 
   // 🔴 طلب **DELETE** لحذف البيانات
