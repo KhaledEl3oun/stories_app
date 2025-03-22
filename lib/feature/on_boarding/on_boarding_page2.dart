@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'on_boarding.dart';
+
 class OnBoardingPage2 extends StatelessWidget {
   const OnBoardingPage2({super.key});
 
@@ -20,23 +21,27 @@ class OnBoardingPage2 extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 40.h),
-                const AppText(text: 'سجل الآن واستمتع بأفضل تجربة تعليمية للأطفال.'),
+                const AppText(
+                    text: 'سجل الآن واستمتع بأفضل تجربة تعليمية للأطفال.'),
                 SizedBox(height: 30.h),
                 Row(
                   children: [
                     Expanded(
                       child: AppButton(
-                        textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 20,
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.bold,),
-                        minimumSize: MaterialStateProperty.all(const Size(380, 50)),
+                        textStyle:
+                            Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  fontSize: 20,
+                                  color: AppColors.primaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                        minimumSize:
+                            MaterialStateProperty.all(const Size(380, 50)),
                         text: 'إنشاء حساب',
                         onPressed: () {
                           context.pushNamed(AppRoutes.registerScreen);
-
                         },
-                        backgroundColor: MaterialStateProperty.all(Colors.white),
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white),
                         textColor: AppColors.primaryColor,
                         borderColor: AppColors.primaryColor,
                       ),
@@ -44,12 +49,14 @@ class OnBoardingPage2 extends StatelessWidget {
                     const SizedBox(width: 20),
                     Expanded(
                       child: AppButton(
-                        textStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontSize: 20,
-                          color: AppColors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        minimumSize: MaterialStateProperty.all(const Size(380, 50)),
+                        textStyle:
+                            Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                  fontSize: 20,
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                        minimumSize:
+                            MaterialStateProperty.all(const Size(380, 50)),
                         onPressed: () {
                           context.pushNamed(AppRoutes.loginScreen);
                         },
@@ -59,7 +66,6 @@ class OnBoardingPage2 extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 20.h),
-
                 TextPrompt(
                   primaryText: ' ',
                   actionText: 'المتابعة كزائر',
@@ -93,19 +99,17 @@ class OnBoardingPage2 extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 SizedBox(height: 20.h),
-
                 Center(
                   child: GestureDetector(
-                    onTap: () {
-                    },
+                    onTap: () {},
                     child: Container(
                       width: 70.w,
                       height: 70.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.grey.shade400, width: 1),
+                        border:
+                            Border.all(color: Colors.grey.shade400, width: 1),
                       ),
                       child: Center(
                         child: Image.asset(
@@ -117,10 +121,7 @@ class OnBoardingPage2 extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 50.h),
-
-
               ],
             ),
           ),

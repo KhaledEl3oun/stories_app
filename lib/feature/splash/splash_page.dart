@@ -20,14 +20,16 @@ void checkLoginStatus(BuildContext context) async {
     print("✅ المستخدم مسجّل دخول، سيتم التوجيه إلى `HomeScreen`");
     Future.delayed(Duration(milliseconds: 500), () {
       if (context.mounted) {
-        Navigator.pushReplacementNamed(context, '/homeScreen'); // ✅ تأكد أن اسم المسار صحيح
+        Navigator.pushReplacementNamed(
+            context, '/homeScreen'); // ✅ تأكد أن اسم المسار صحيح
       }
     });
   } else {
     print("❌ لم يتم العثور على `token`، سيتم التوجيه إلى `LoginScreen`");
     Future.delayed(Duration(milliseconds: 500), () {
       if (context.mounted) {
-        Navigator.pushReplacementNamed(context, '/loginScreen'); // ✅ تأكد أن اسم المسار صحيح
+        Navigator.pushReplacementNamed(
+            context, '/loginScreen'); // ✅ تأكد أن اسم المسار صحيح
       }
     });
   }

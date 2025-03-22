@@ -143,7 +143,8 @@ class StoryDetailsPage extends StatelessWidget {
                             }
                             if (state is ReedUnReedStorySuccess) {
                               Future.delayed(Duration(seconds: 3), () {
-                                Navigator.pop(context);
+                                context
+                                    .pushReplacementNamed(AppRoutes.homeScreen);
                               });
                             }
                           },

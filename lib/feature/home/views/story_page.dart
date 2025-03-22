@@ -117,77 +117,81 @@ class StoryPage extends StatelessWidget {
                         ),
                       );
                     }
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: state.subCategories.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 163 / 190,
-                      ),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            context.pushNamed(AppRoutes.subStoryPage);
-                            context.read<SubStoryCubit>().fetchSubStory(
-                                  state.subCategories[index].id ?? '',
-                                );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  Theme.of(context).scaffoldBackgroundColor ==
-                                          Color(0xff191201)
-                                      ? Color(0xff2b1e08)
-                                      : Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 133.h,
-                                        width: 150.w,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                                      .scaffoldBackgroundColor ==
-                                                  Colors.black
-                                              ? Colors.grey[800]
-                                              : Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          image: DecorationImage(
-                                            image: NetworkImage(state
-                                                    .subCategories[index]
-                                                    .image ??
-                                                ''),
-                                            fit: BoxFit.cover,
-                                            onError: (exception, stackTrace) {
-                                              print(
-                                                  "❌ فشل تحميل صورة الفئة: ${state.subCategories[index].image}");
-                                            },
+                    return Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: state.subCategories.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 163 / 190,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              context.pushNamed(AppRoutes.subStoryPage);
+                              context.read<SubStoryCubit>().fetchSubStory(
+                                    state.subCategories[index].id ?? '',
+                                  );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor ==
+                                            Color(0xff191201)
+                                        ? Color(0xff2b1e08)
+                                        : Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 133.h,
+                                          width: 150.w,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                        .scaffoldBackgroundColor ==
+                                                    Colors.black
+                                                ? Colors.grey[800]
+                                                : Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            image: DecorationImage(
+                                              image: NetworkImage(state
+                                                      .subCategories[index]
+                                                      .image ??
+                                                  ''),
+                                              fit: BoxFit.cover,
+                                              onError: (exception, stackTrace) {
+                                                print(
+                                                    "❌ فشل تحميل صورة الفئة: ${state.subCategories[index].image}");
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      AppText(
-                                        text: state.subCategories[index].name ??
-                                            '',
-                                        color: AppColors.primaryColor,
-                                      ),
-                                    ],
+                                        AppText(
+                                          text:
+                                              state.subCategories[index].name ??
+                                                  '',
+                                          color: AppColors.primaryColor,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     );
                   } else {
                     return Center(

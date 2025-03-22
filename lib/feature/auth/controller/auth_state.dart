@@ -27,3 +27,9 @@ class AuthFailure extends AuthState {
   final String error;
   AuthFailure(this.error);
 }
+
+class AuthGoogleSuccess extends AuthState {
+  final String token;
+  final String username;
+  AuthGoogleSuccess(this.token, this.username);
+}

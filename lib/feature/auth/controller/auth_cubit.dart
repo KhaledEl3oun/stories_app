@@ -7,6 +7,8 @@ import '../../../core/network/endpoints.dart';
 import '../model/user_model.dart';
 import '../model/message_model.dart';
 import 'auth_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
@@ -15,6 +17,65 @@ class AuthCubit extends Cubit<AuthState> {
   final box = GetStorage();
 
   static AuthCubit get(context) => BlocProvider.of(context);
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+  Future<void> signInWithGoogle() async {
+    emit(AuthLoading());
+
+    try {
+      // 🔹 تسجيل الدخول باستخدام Google
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        emit(AuthFailure("تم إلغاء تسجيل الدخول من قبل المستخدم."));
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // 🔹 إنشاء بيانات الاعتماد باستخدام Google Access Token
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // 🔹 تسجيل الدخول في Firebase
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+
+      // 🔹 الحصول على بيانات المستخدم
+      final User? user = userCredential.user;
+      debugPrint("🟢 User: $user");
+      if (user == null) {
+        emit(AuthFailure("لم يتم استرجاع بيانات المستخدم."));
+        return;
+      }
+
+      // 🔹 الحصول على Token
+      final String? token = await user.getIdToken();
+      debugPrint("🟢 Token: $token");
+      if (token == null) {
+        emit(AuthFailure("لم يتم استرجاع التوكن."));
+        return;
+      }
+
+      // 🔹 حفظ البيانات محليًا
+      box.write('token', token);
+      box.write('user', {
+        'name': user.displayName,
+        'email': user.email,
+        'photo': user.photoURL,
+        'uid': user.uid,
+      });
+
+      // 🔹 إرسال الحالة الناجحة مع بيانات المستخدم
+      emit(AuthGoogleSuccess(token, user.displayName ?? "مستخدم غير معروف"));
+    } catch (e) {
+      debugPrint("🔴 Error: $e");
+      emit(AuthFailure("حدث خطأ أثناء تسجيل الدخول: $e"));
+    }
+  }
 
   // 🟢 تسجيل الدخول
   void login(String email, String password) async {
@@ -144,7 +205,9 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   // 🔴 **تسجيل الخروج**
-  void logout(BuildContext context) {
+  void logout(BuildContext context) async {
+    await _googleSignIn.signOut();
+    await _auth.signOut();
     box.remove('token');
     box.remove('userName');
     Navigator.pushReplacementNamed(context, '/loginScreen');
