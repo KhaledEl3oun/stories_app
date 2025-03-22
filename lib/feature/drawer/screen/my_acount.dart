@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stories_app/core/extension/navigator.dart';
 import 'package:stories_app/core/route/app_routes.dart';
 import 'package:stories_app/core/theme/app_colors.dart';
@@ -7,10 +10,16 @@ import 'package:stories_app/core/widget/text/app_text.dart';
 import 'package:stories_app/feature/drawer/drawer_page.dart';
 import 'package:stories_app/feature/home/views/widget/custom_row_header.dart';
 
-class MyAccount extends StatelessWidget {
+class MyAccount extends StatefulWidget {
   MyAccount({super.key});
 
+  @override
+  State<MyAccount> createState() => _MyAccountState();
+}
+String? path;
+class _MyAccountState extends State<MyAccount> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +34,28 @@ class MyAccount extends StatelessWidget {
               const SizedBox(height: 40),
               AppBarCustom(title: 'حسابي',scaffoldKey: _scaffoldKey,),
               const SizedBox(height: 40),
-              const Center(child: CircleAvatar(radius: 50)),
+               Center(child:  Stack(
+                 children: [
+                    CircleAvatar(
+                      radius: 85,
+                      backgroundColor: AppColors.primaryColor,
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundImage: path != null
+                            ? FileImage(File(path!)) as ImageProvider
+                            : AssetImage('assets/images/person.png'),
+                      ),
+                    ),
+                  Container(
+                    width: 50,
+                    height: 50,
+                    child: Icon(Icons.camera_alt,size: 30,),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.primaryColor,
+                   ) ),
+                  ],
+               ),),
               const SizedBox(height: 20),
               ProfileItem(
                 title: 'الاسم',
@@ -62,6 +92,25 @@ class MyAccount extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  uploadFromCamera() async {
+    var pickedImage = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (pickedImage != null) {
+      setState(() {
+        path = pickedImage.path;
+      });
+    }
+  }
+
+  uploadFromGallery() async {
+    var pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        path = pickedImage.path;
+      });
+    }
   }
 }
 
@@ -100,4 +149,5 @@ class ProfileItem extends StatelessWidget {
       ],
     );
   }
+
 }

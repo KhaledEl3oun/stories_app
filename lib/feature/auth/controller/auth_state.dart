@@ -27,3 +27,14 @@ class AuthFailure extends AuthState {
   final String error;
   AuthFailure(this.error);
 }
+
+class AuthUpdated extends AuthState {
+  final UserModel user;
+  AuthUpdated(this.user);
+}
+
+
+class AuthError extends AuthState {
+  final String message;
+  AuthError(this.message);
+}

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:stories_app/core/shared.dart';
 import '../../../core/network/dio_helper.dart';
 import '../../../core/network/endpoints.dart';
 import '../model/user_model.dart';
@@ -63,7 +64,10 @@ class AuthCubit extends Cubit<AuthState> {
       );
       if (response.statusCode == 201 && response.data.containsKey("data")) {
         final userModel = UserModel.fromJson(response.data);
-        box.write('userName', userName);
+      //  box.write('userName', userName);
+        box.write('userModel' , userModel);
+        currentUser = box.read('userModel');
+
         emit(AuthRegistered(userModel));
       } else {
         emit(AuthFailure("فشل إنشاء الحساب، استجابة غير متوقعة!"));
@@ -149,4 +153,30 @@ class AuthCubit extends Cubit<AuthState> {
     box.remove('userName');
     Navigator.pushReplacementNamed(context, '/loginScreen');
   }
+
+ void updateUserData({String? userName, String? email, String? phone, }) async {
+  emit(AuthLoading());
+  try {
+    String? token = box.read('token'); // 🟢 جلب التوكن من التخزين
+    final response = await DioHelper.putData(
+      url: "https://app.balady-sa.pro/api/v1/user/updateMyData", // ✅ تأكد إن الـ endpoint صحيح
+      data: {
+        if (userName != null) 'userName': userName,
+        if (email != null) 'email': email,
+        if (phone != null) 'phone': phone,
+      },
+      token: token,
+    );
+
+    final userModel = UserModel.fromJson(response.data);
+    box.write('updateUserName', currentUser?.userName); // ✅ تحديث البيانات في التخزين
+    emit(AuthUpdated(userModel));
+  } catch (error) {
+    emit(AuthFailure("❌ حدث خطأ أثناء تحديث البيانات!"));
+  }
+}
+
+
+
+
 }

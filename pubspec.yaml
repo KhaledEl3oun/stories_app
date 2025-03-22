@@ -41,11 +41,13 @@ dependencies:
   flutter_otp_text_field: ^1.1.3+2
   flutter_rating_bar: null
   flutter_screenutil: ^5.9.3
+  flutter_svg: ^2.0.10+1
   gap: ^3.0.1
   get_storage: ^2.1.1
-  x_validators: ^1.0.8
-  flutter_svg: ^2.0.10+1
+  image_picker: ^1.1.2
   lottie: ^3.0.0
+  smooth_page_indicator: ^1.2.1
+  x_validators: ^1.0.8
 
 dev_dependencies:
   flutter_lints: ^5.0.0

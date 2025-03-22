@@ -40,7 +40,7 @@ void main() async {
         ),
         BlocProvider<SubCategoryCubit>(
           create: (context) => SubCategoryCubit(),
-        ),
+        ),  
         BlocProvider<DetailsStoryCubit>(
           create: (context) => DetailsStoryCubit(),
         ),

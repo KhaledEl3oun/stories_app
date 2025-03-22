@@ -10,12 +10,14 @@ import 'package:stories_app/core/widget/text/app_text.dart';
 import 'package:stories_app/core/widget/text_failed/custom_textfailed%20_search.dart';
 import 'package:stories_app/feature/drawer/drawer_page.dart';
 import 'package:stories_app/feature/home/controller/sub_story_cubit.dart';
+
 import '../../../core/widget/custom_app_image.dart';
 import '../controller/sub_category_cubit.dart';
 
 class StoryPage extends StatelessWidget {
   StoryPage({super.key});
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  
 
   @override
   Widget build(BuildContext context) {
