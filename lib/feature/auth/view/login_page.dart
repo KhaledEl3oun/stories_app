@@ -35,18 +35,18 @@ class _LoginPageState extends State<LoginPage> {
     return BlocProvider(
       create: (context) => AuthCubit(),
       child: Scaffold(
-        body: 
-        Container(
-           decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-              Theme.of(context).scaffoldBackgroundColor == const Color(0xff191201)
-                  ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
-                  : 'assets/images/lightBg.png', // ✅ خلفية اللايت
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                Theme.of(context).scaffoldBackgroundColor ==
+                        const Color(0xff191201)
+                    ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
+                    : 'assets/images/lightBg.png', // ✅ خلفية اللايت
+              ),
+              fit: BoxFit.cover, // ✅ جعل الصورة تغطي الشاشة بالكامل
             ),
-            fit: BoxFit.cover, // ✅ جعل الصورة تغطي الشاشة بالكامل
           ),
-        ),
           child: AppPadding(
             child: Center(
               child: SingleChildScrollView(
@@ -56,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 40.h),
                     const CustomHeaderRow(title: 'تسجيل الدخول'),
                     SizedBox(height: 20.h),
-          
+
                     /// ✅ صورة تسجيل الدخول
                     Center(
                       child: Image.asset(
@@ -64,9 +64,9 @@ class _LoginPageState extends State<LoginPage> {
                         fit: BoxFit.cover,
                       ),
                     ),
-          
+
                     SizedBox(height: 10.h),
-          
+
                     Form(
                       key: _formKey,
                       child: Column(
@@ -91,9 +91,9 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                     ),
-          
+
                     const SizedBox(height: 10),
-          
+
                     /// ✅ نسيت كلمة المرور؟
                     GestureDetector(
                       onTap: () {
@@ -108,15 +108,19 @@ class _LoginPageState extends State<LoginPage> {
                                 color: AppColors.primaryColor, fontSize: 18),
                       ),
                     ),
-          
+
                     SizedBox(height: 30.h),
-          
+
                     BlocConsumer<AuthCubit, AuthState>(
                       listener: (context, state) {
                         if (state is AuthLoggedIn) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("تم تسجيل الدخول بنجاح!",
-                            style: TextStyle(color: Colors.green,fontFamily: 'cairo'),)),
+                            SnackBar(
+                                content: Text(
+                              "تم تسجيل الدخول بنجاح!",
+                              style: TextStyle(
+                                  color: Colors.green, fontFamily: 'cairo'),
+                            )),
                           );
                           Future.microtask(() {
                             context.pushNamed(AppRoutes.homeScreen);
@@ -149,9 +153,9 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       },
                     ),
-          
+
                     SizedBox(height: 20.h),
-          
+
                     /// ✅ ليس لديك حساب؟
                     TextPrompt(
                       primaryText: 'ليس لديك حساب؟  ',
@@ -160,7 +164,80 @@ class _LoginPageState extends State<LoginPage> {
                         context.pushNamed(AppRoutes.registerScreen);
                       },
                     ),
-          
+
+                    SizedBox(height: 10.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.grey.shade400,
+                            thickness: 1,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          child: Text(
+                            "أو",
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.grey.shade400,
+                            thickness: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.h),
+                    BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                        if (state is AuthGoogleSuccess) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    "✅ تم تسجيل الدخول بنجاح: ${state.username}")),
+                          );
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.homeScreen);
+                        } else if (state is AuthFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("❌ خطأ: ${state.error}")),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        return Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              AuthCubit.get(context).signInWithGoogle();
+                            },
+                            child: Container(
+                              width: 70.w,
+                              height: 70.h,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: Colors.grey.shade400, width: 1),
+                              ),
+                              child: state is AuthLoading
+                                  ? CircularProgressIndicator()
+                                  : Center(
+                                      child: Image.asset(
+                                        'assets/images/devicon_google.png',
+                                        width: 30.w,
+                                        height: 30.h,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                     SizedBox(height: 50.h),
                   ],
                 ),

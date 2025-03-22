@@ -34,18 +34,18 @@ class _RegisterPageState extends State<RegisterPage> {
     return BlocProvider(
       create: (context) => AuthCubit(),
       child: Scaffold(
-        body: 
-        Container(
-           decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-              Theme.of(context).scaffoldBackgroundColor == const Color(0xff191201)
-                  ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
-                  : 'assets/images/lightBg.png', // ✅ خلفية اللايت
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                Theme.of(context).scaffoldBackgroundColor ==
+                        const Color(0xff191201)
+                    ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
+                    : 'assets/images/lightBg.png', // ✅ خلفية اللايت
+              ),
+              fit: BoxFit.fill, // ✅ جعل الصورة تغطي الشاشة بالكامل
             ),
-            fit: BoxFit.fill, // ✅ جعل الصورة تغطي الشاشة بالكامل
           ),
-        ),
           child: AppPadding(
             child: Center(
               child: SingleChildScrollView(
@@ -173,6 +173,56 @@ class _RegisterPageState extends State<RegisterPage> {
                       onTap: () {
                         context.pushNamed(AppRoutes.loginScreen);
                       },
+                    ),
+                    SizedBox(height: 10.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.grey.shade400,
+                            thickness: 1,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          child: Text(
+                            "أو",
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.grey.shade400,
+                            thickness: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20.h),
+                    Center(
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          width: 70.w,
+                          height: 70.h,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                color: Colors.grey.shade400, width: 1),
+                          ),
+                          child: Center(
+                            child: Image.asset(
+                              'assets/images/devicon_google.png',
+                              width: 30.w,
+                              height: 30.h,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(height: 50.h),
                   ],

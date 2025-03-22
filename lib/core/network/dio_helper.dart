@@ -33,6 +33,7 @@ class DioHelper {
   }
 
   // 🟠 طلب **PUT** لتحديث البيانات
+<<<<<<< HEAD
  static Future<Response> putData({
   required String url,
   required Map<String, dynamic> data,
@@ -50,6 +51,15 @@ class DioHelper {
   );
 }
 
+=======
+  static Future<Response> putData({
+    required String url,
+    required Map<String, dynamic> data,
+    Map<String, dynamic>? headers,
+  }) async {
+    return await dio.put(url, data: data, options: Options(headers: headers));
+  }
+>>>>>>> 9ae9e37eeb2f6a027fb6735e992c6cb6be7ed202
 
   // 🟠 طلب **patch** لتحديث البيانات
   static Future<Response> patchData({

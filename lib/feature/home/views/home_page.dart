@@ -98,17 +98,77 @@ class _HomePageState extends State<HomePage> {
                             const Center(child: Text("❌ لا توجد أقسام"))
                           else
                             SizedBox(
-                              height: screenHeight * 0.18, // ✅ بدل `140`
+                              height:
+                                  140, // ✅ تأكد من تحديد ارتفاع لـ `ListView`
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: state.categories.length,
                                 itemBuilder: (context, index) {
-                                  return CategoryItem(
-                                    category: state.categories[index],
-                                    onTap: () {
-                                      context.pushNamed(AppRoutes.storyPage);
-                                      context.read<SubCategoryCubit>().fetchSubCategories(state.categories[index].id);
-                                    },
+                                  final category = state.categories[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        context.pushNamed(
+                                          AppRoutes.storyPage,
+                                        );
+                                        context
+                                            .read<SubCategoryCubit>()
+                                            .fetchSubCategories(category.id);
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.all(8),
+                                        width: 130, // ✅ تأكد من تحديد عرض مناسب
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                                      .scaffoldBackgroundColor ==
+                                                  Color(0xff191201)
+                                              ? Color(0xff2b1e08)
+                                              : Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(9),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 90.h,
+                                              width: 120.w,
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                            .scaffoldBackgroundColor ==
+                                                        Color(0xff191201)
+                                                    ? Colors.grey[800]
+                                                    : Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(9),
+                                                image: DecorationImage(
+                                                  image: NetworkImage(
+                                                      category.image),
+                                                  fit: BoxFit.cover,
+                                                  onError:
+                                                      (exception, stackTrace) {
+                                                    print(
+                                                        "❌ فشل تحميل صورة الفئة: ${category.image}");
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            Gap(7.h),
+                                            Center(
+                                              child: Text(category.name,
+                                                  style: TextStyle(
+                                                    fontFamily: 'cairo',
+                                                    color: Theme.of(context)
+                                                                .scaffoldBackgroundColor ==
+                                                            Color(0xff191201)
+                                                        ? AppColors.white
+                                                        : Colors.black,
+                                                  )),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   );
                                 },
                               ),
@@ -132,31 +192,97 @@ class _HomePageState extends State<HomePage> {
                           if (state.stories.isEmpty)
                             const Center(child: Text("❌ لا توجد قصص"))
                           else
-                            SizedBox(
-                              height: screenHeight * 0.6, // ✅ بدل `630`
-                              child: GridView.builder(
-                                physics: const NeverScrollableScrollPhysics(), // ✅ تعطيل الـ Scroll لأنه داخل `SingleChildScrollView`
-                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: screenWidth > 600 ? 3 : 2, // ✅ 3 أعمدة في الشاشات الكبيرة و 2 في الصغيرة
-                                  crossAxisSpacing: screenWidth * 0.03,
-                                  mainAxisSpacing: screenWidth * 0.03,
-                                  childAspectRatio: 0.85, // ✅ تعديل حسب الحاجة
-                                ),
-                                itemCount: state.stories.length,
-                                itemBuilder: (context, index) {
-                                  final story = state.stories[index];
-                                  return StoryItem(
-                                    story: story,
-                                    onTap: () {
-                                      context.pushNamed(
-                                        AppRoutes.storyDetailsPage,
-                                        arguments: story,
-                                      );
-                                      context.read<DetailsStoryCubit>().fetchSingleStory(story.id);
-                                    },
-                                  );
-                                },
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: state.stories.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 163 / 190,
                               ),
+                              itemBuilder: (context, index) {
+                                final story = state.stories[index];
+                                return GestureDetector(
+                                  onTap: () {
+                                    context.pushNamed(
+                                      AppRoutes.storyDetailsPage,
+                                      arguments: story,
+                                    );
+                                    context
+                                        .read<DetailsStoryCubit>()
+                                        .fetchSingleStory(story.id);
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(8),
+                                    height: 290.h,
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                                  .scaffoldBackgroundColor ==
+                                              Color(0xff191201)
+                                          ? Color(0xff2b1e08)
+                                          : Colors.white,
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 140.h,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                        .scaffoldBackgroundColor ==
+                                                    Colors.black
+                                                ? Color(0xff2b1e08)
+                                                : Colors.white,
+                                            borderRadius: const BorderRadius
+                                                .only(
+                                                topLeft: Radius.circular(16),
+                                                topRight: Radius.circular(16),
+                                                bottomLeft: Radius.circular(16),
+                                                bottomRight:
+                                                    Radius.circular(16)),
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                  story.imageCover),
+                                              fit: BoxFit.cover,
+                                              onError: (exception, stackTrace) {
+                                                print(
+                                                    "❌ فشل تحميل صورة القصة: ${story.imageCover}");
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        Gap(5.h),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              story.title,
+                                              style: TextStyle(
+                                                fontFamily: "cairo",
+                                                color: Theme.of(context)
+                                                            .scaffoldBackgroundColor ==
+                                                        Color(0xff191201)
+                                                    ? AppColors.white
+                                                    : Colors.black,
+                                                fontSize: 14.dg,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            Gap(5.h),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                         ],
                       );

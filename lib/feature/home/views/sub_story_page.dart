@@ -19,7 +19,7 @@ class SubStoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subCategoryCubit = context.watch<SubCategoryCubit>();
+    final subStoryCubit = context.watch<SubStoryCubit>();
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: CustomDrawer(),
@@ -39,8 +39,11 @@ class SubStoryPage extends StatelessWidget {
                           context.read<ThemeCubit>().toggleTheme();
                         },
                         child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor ==
+                                    Color(0xff191201)
+                                ? Color(0xff2b1e08)
+                                : Colors.white,
                             shape: BoxShape.circle,
                           ),
                           height: 40,
@@ -54,9 +57,12 @@ class SubStoryPage extends StatelessWidget {
                           context.pushNamed(AppRoutes.notificationScreen);
                         },
                         child: Container(
-                          decoration: const BoxDecoration(
+                          decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white,
+                            color: Theme.of(context).scaffoldBackgroundColor ==
+                                    Color(0xff191201)
+                                ? Color(0xff2b1e08)
+                                : Colors.white,
                           ),
                           height: 40,
                           width: 40,
@@ -86,7 +92,7 @@ class SubStoryPage extends StatelessWidget {
                   width: 30,
                   height: 30,
                 ),
-                controller: subCategoryCubit.searchController,
+                controller: subStoryCubit.searchController,
               ),
               const SizedBox(height: 10),
               BlocBuilder<SubStoryCubit, SubStoryState>(
@@ -111,92 +117,110 @@ class SubStoryPage extends StatelessWidget {
                         ),
                       );
                     }
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: state.subStoryModel.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        childAspectRatio: 163 / 190,
-                      ),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () {
-                            context.pushNamed(AppRoutes.storyDetailsPage);
-                            context.read<DetailsStoryCubit>().fetchSingleStory(
-                                  state.subStoryModel[index].id ?? '',
-                                );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  Theme.of(context).scaffoldBackgroundColor ==
-                                          Colors.black
-                                      ? Colors.grey[900]
-                                      : Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 133.h,
-                                        width: 150.w,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                                      .scaffoldBackgroundColor ==
-                                                  Colors.black
-                                              ? Colors.grey[800]
-                                              : Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          image: DecorationImage(
-                                            image: NetworkImage(state
-                                                    .subStoryModel[index]
-                                                    .imageCover ??
-                                                ''),
-                                            fit: BoxFit.cover,
-                                            onError: (exception, stackTrace) {
-                                              print(
-                                                  "❌ فشل تحميل صورة الفئة: ${state.subStoryModel[index].imageCover}");
-                                            },
+                    return Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: state.subStoryModel.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 163 / 190,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              context.pushNamed(AppRoutes.storyDetailsPage);
+                              context
+                                  .read<DetailsStoryCubit>()
+                                  .fetchSingleStory(
+                                    state.subStoryModel[index].id ?? '',
+                                  );
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor ==
+                                            Color(0xff191201)
+                                        ? Color(0xff2b1e08)
+                                        : Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          height: 133.h,
+                                          width: 150.w,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context)
+                                                        .scaffoldBackgroundColor ==
+                                                    Colors.black
+                                                ? Colors.grey[800]
+                                                : Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            image: DecorationImage(
+                                              image: NetworkImage(state
+                                                      .subStoryModel[index]
+                                                      .imageCover ??
+                                                  ''),
+                                              fit: BoxFit.cover,
+                                              onError: (exception, stackTrace) {
+                                                print(
+                                                    "❌ فشل تحميل صورة الفئة: ${state.subStoryModel[index].imageCover}");
+                                              },
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          if (state.subStoryModel[index]
-                                                  .isRead ==
-                                              true)
-                                            Icon(
-                                              Icons.check_circle,
-                                              color: Colors.green,
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            if (state.subStoryModel[index]
+                                                    .isRead ==
+                                                true)
+                                              Icon(
+                                                Icons.check_circle,
+                                                color: Colors.green,
+                                              ),
+                                            Expanded(
+                                              child: AppText(
+                                                textAlign: TextAlign.center,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                                text: state.subStoryModel[index]
+                                                        .title ??
+                                                    '',
+                                                textStyle: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge
+                                                    ?.copyWith(
+                                                      color: Theme.of(context)
+                                                                  .scaffoldBackgroundColor ==
+                                                              Colors.black
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                    ),
+                                              ),
                                             ),
-                                          AppText(
-                                            text: state.subStoryModel[index]
-                                                    .title ??
-                                                '',
-                                            textStyle:
-                                                const TextStyle(fontSize: 16),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     );
                   } else {
                     return Center(
