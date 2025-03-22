@@ -10,6 +10,8 @@ import 'package:stories_app/core/route/route_generate.dart';
 import 'package:stories_app/core/theme/app_themes.dart';
 import 'package:stories_app/core/theme/cubit/theme_cubit.dart';
 import 'package:stories_app/feature/auth/controller/auth_cubit.dart';
+import 'package:stories_app/feature/drawer/controller/rat_application_cubit.dart';
+import 'package:stories_app/feature/drawer/controller/update_user_cubit.dart';
 import 'package:stories_app/feature/favorite/controller/cubit/favorite_cubit.dart';
 import 'package:stories_app/feature/home/controller/category_cubit.dart';
 import 'package:stories_app/feature/home/controller/reed_un_reed_story_cubit.dart';
@@ -46,6 +48,12 @@ void main() async {
         ),
         BlocProvider<SubStoryCubit>(
           create: (context) => SubStoryCubit(),
+        ),
+        BlocProvider<RatApplicationCubit>(
+          create: (context) => RatApplicationCubit(),
+        ),
+        BlocProvider<UpdateUserCubit>(
+          create: (context) => UpdateUserCubit(),
         ),
         BlocProvider<ReedUnReedStoryCubit>(
           create: (context) => ReedUnReedStoryCubit(),

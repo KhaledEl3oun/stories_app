@@ -42,7 +42,7 @@ class ReedUnReedStoryCubit extends Cubit<ReedUnReedStoryState> {
 
     try {
       final response = await DioHelper.patchData(
-        url: Endpoints.markStoryAsRead(storyId),
+        url: Endpoints.markStoryUnRead(storyId),
         headers: {
           'Authorization': 'Bearer ${GetStorage().read('token')}',
         },

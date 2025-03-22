@@ -111,7 +111,7 @@ class StoryDetailsPage extends StatelessWidget {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: AppText(
-                                text: 'تمت القراءة',
+                                text: 'تمت العمليه',
                                 textStyle:
                                     Theme.of(context).textTheme.bodyLarge,
                               ),
@@ -132,17 +132,17 @@ class StoryDetailsPage extends StatelessWidget {
                       builder: (context, state) {
                         return GestureDetector(
                           onTap: () {
-                            if (singleStory.isRead == true) {
-                              context
-                                  .read<ReedUnReedStoryCubit>()
-                                  .markStoryUnRead(singleStory.id ?? '');
-                            } else {
+                            if (singleStory.isRead == false) {
                               context
                                   .read<ReedUnReedStoryCubit>()
                                   .markStoryAsRead(singleStory.id ?? '');
+                            } else {
+                              context
+                                  .read<ReedUnReedStoryCubit>()
+                                  .markStoryUnRead(singleStory.id ?? '');
                             }
                             if (state is ReedUnReedStorySuccess) {
-                              Future.delayed(Duration(seconds: 5), () {
+                              Future.delayed(Duration(seconds: 3), () {
                                 Navigator.pop(context);
                               });
                             }
@@ -154,7 +154,7 @@ class StoryDetailsPage extends StatelessWidget {
                                   width: 120,
                                   decoration: BoxDecoration(
                                       border: Border.all(
-                                          width: 1,
+                                          width: 2,
                                           color: singleStory.isRead == true
                                               ? Colors.green
                                               : Colors.grey),
