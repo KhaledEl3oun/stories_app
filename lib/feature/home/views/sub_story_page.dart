@@ -10,6 +10,7 @@ import 'package:stories_app/core/widget/text_failed/custom_textfailed%20_search.
 import 'package:stories_app/feature/drawer/drawer_page.dart';
 import 'package:stories_app/feature/home/controller/single_details_story_cubit.dart';
 import 'package:stories_app/feature/home/controller/sub_story_cubit.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../../core/widget/custom_app_image.dart';
 import '../controller/sub_category_cubit.dart';
 
@@ -119,107 +120,147 @@ class SubStoryPage extends StatelessWidget {
                     }
                     return Directionality(
                       textDirection: TextDirection.rtl,
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: state.subStoryModel.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 163 / 190,
-                        ),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              context.pushNamed(AppRoutes.storyDetailsPage);
-                              context
-                                  .read<DetailsStoryCubit>()
-                                  .fetchSingleStory(
-                                    state.subStoryModel[index].id ?? '',
-                                  );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor ==
+                      child: Column(
+                        children: [
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: state.subStoryModel.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 163 / 190,
+                            ),
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  context.pushNamed(AppRoutes.storyDetailsPage);
+                                  context
+                                      .read<DetailsStoryCubit>()
+                                      .fetchSingleStory(
+                                        state.subStoryModel[index].id ?? '',
+                                      );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                                .scaffoldBackgroundColor ==
                                             Color(0xff191201)
                                         ? Color(0xff2b1e08)
                                         : Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: 133.h,
-                                          width: 150.w,
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                        .scaffoldBackgroundColor ==
-                                                    Colors.black
-                                                ? Colors.grey[800]
-                                                : Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            image: DecorationImage(
-                                              image: NetworkImage(state
-                                                      .subStoryModel[index]
-                                                      .imageCover ??
-                                                  ''),
-                                              fit: BoxFit.cover,
-                                              onError: (exception, stackTrace) {
-                                                print(
-                                                    "❌ فشل تحميل صورة الفئة: ${state.subStoryModel[index].imageCover}");
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
                                           children: [
-                                            if (state.subStoryModel[index]
-                                                    .isRead ==
-                                                true)
-                                              Icon(
-                                                Icons.check_circle,
-                                                color: Colors.green,
+                                            Container(
+                                              height: 133.h,
+                                              width: 150.w,
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                            .scaffoldBackgroundColor ==
+                                                        Colors.black
+                                                    ? Colors.grey[800]
+                                                    : Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
+                                                image: DecorationImage(
+                                                  image: NetworkImage(state
+                                                          .subStoryModel[index]
+                                                          .imageCover ??
+                                                      ''),
+                                                  fit: BoxFit.cover,
+                                                  onError:
+                                                      (exception, stackTrace) {
+                                                    print(
+                                                        "❌ فشل تحميل صورة الفئة: ${state.subStoryModel[index].imageCover}");
+                                                  },
+                                                ),
                                               ),
-                                            Expanded(
-                                              child: AppText(
-                                                textAlign: TextAlign.center,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                                text: state.subStoryModel[index]
-                                                        .title ??
-                                                    '',
-                                                textStyle: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge
-                                                    ?.copyWith(
-                                                      color: Theme.of(context)
-                                                                  .scaffoldBackgroundColor ==
-                                                              Colors.black
-                                                          ? Colors.white
-                                                          : Colors.black,
-                                                    ),
-                                              ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                if (state.subStoryModel[index]
+                                                        .isRead ==
+                                                    true)
+                                                  Icon(
+                                                    Icons.check_circle,
+                                                    color: Colors.green,
+                                                  ),
+                                                Expanded(
+                                                  child: AppText(
+                                                    textAlign: TextAlign.center,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    text: state
+                                                            .subStoryModel[
+                                                                index]
+                                                            .title ??
+                                                        '',
+                                                    textStyle: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyLarge
+                                                        ?.copyWith(
+                                                          color: Theme.of(context)
+                                                                      .scaffoldBackgroundColor ==
+                                                                  Colors.black
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              );
+                            },
+                          ),
+                          if (subStoryCubit.totalPages > 1)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                IconButton(
+                                  onPressed: subStoryCubit.currentPage > 1
+                                      ? () {
+                                          subStoryCubit.fetchPreviousPage();
+                                        }
+                                      : null,
+                                  icon: Icon(Icons.arrow_back_ios,
+                                      color: AppColors.primaryColor),
+                                ),
+                                Text(
+                                  "${subStoryCubit.currentPage} من ${subStoryCubit.totalPages}",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.primaryColor),
+                                ),
+                                IconButton(
+                                  onPressed: subStoryCubit.currentPage <
+                                          subStoryCubit.totalPages
+                                      ? () {
+                                          subStoryCubit.fetchNextPage();
+                                        }
+                                      : null,
+                                  icon: Icon(Icons.arrow_forward_ios,
+                                      color: AppColors.primaryColor),
+                                ),
+                              ],
                             ),
-                          );
-                        },
+                        ],
                       ),
                     );
                   } else {

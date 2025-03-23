@@ -14,6 +14,8 @@ class CategoryCubit extends Cubit<CategoryState> {
   CategoryCubit() : super(CategoryInitial()) {
     searchController.addListener(_onSearchTextChanged);
   }
+  int currentPage = 1; // الصفحة الحالية
+  int totalPages = 1; // العدد الإجمالي للصفحات
 
   List<CategoryModel> categories = [];
   List<StoryModel> stories = [];
@@ -28,7 +30,7 @@ class CategoryCubit extends Cubit<CategoryState> {
     fetchCategoriesAndStories();
   }
 
-  Future<void> fetchCategoriesAndStories() async {
+  Future<void> fetchCategoriesAndStories({int page = 1}) async {
     emit(CategoryLoading());
     try {
       final categoryResponse = await DioHelper.getData(
@@ -44,14 +46,19 @@ class CategoryCubit extends Cubit<CategoryState> {
         return;
       }
 
-      final storyResponse = await DioHelper.getData(
-          url: Endpoints.story, query: {'search': searchController.text});
+      final response = await DioHelper.getData(
+        url: Endpoints.story,
+        query: {
+          'search': searchController.text,
+          'page': page,
+        },
+      );
 
-      if (storyResponse.statusCode == 200 &&
-          storyResponse.data['data'] is List) {
-        stories = (storyResponse.data['data'] as List)
-            .map((story) => StoryModel.fromJson(story))
-            .toList();
+      if (response.statusCode == 200) {
+        final storyResponse = StoryResponse.fromJson(response.data);
+        currentPage = page;
+        totalPages = storyResponse.totalPages;
+        stories = storyResponse.data; // تحديث القصص الجديدة
       } else {
         emit(CategoryFailure('❌ خطأ أثناء تحميل القصص'));
         return;
@@ -67,5 +74,17 @@ class CategoryCubit extends Cubit<CategoryState> {
   Future<void> close() {
     searchController.dispose();
     return super.close();
+  }
+
+  void fetchNextPage() {
+    if (currentPage < totalPages) {
+      fetchCategoriesAndStories(page: currentPage + 1);
+    }
+  }
+
+  void fetchPreviousPage() {
+    if (currentPage > 1) {
+      fetchCategoriesAndStories(page: currentPage - 1);
+    }
   }
 }

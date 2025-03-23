@@ -119,78 +119,114 @@ class StoryPage extends StatelessWidget {
                     }
                     return Directionality(
                       textDirection: TextDirection.rtl,
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: state.subCategories.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                          childAspectRatio: 163 / 190,
-                        ),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              context.pushNamed(AppRoutes.subStoryPage);
-                              context.read<SubStoryCubit>().fetchSubStory(
-                                    state.subCategories[index].id ?? '',
-                                  );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor ==
+                      child: Column(
+                        children: [
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: state.subCategories.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 163 / 190,
+                            ),
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  context.pushNamed(AppRoutes.subStoryPage);
+                                  context.read<SubStoryCubit>().fetchSubStory(
+                                        id: state.subCategories[index].id ?? '',
+                                      );
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                                .scaffoldBackgroundColor ==
                                             Color(0xff191201)
                                         ? Color(0xff2b1e08)
                                         : Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: 133.h,
-                                          width: 150.w,
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                        .scaffoldBackgroundColor ==
-                                                    Colors.black
-                                                ? Colors.grey[800]
-                                                : Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            image: DecorationImage(
-                                              image: NetworkImage(state
-                                                      .subCategories[index]
-                                                      .image ??
-                                                  ''),
-                                              fit: BoxFit.cover,
-                                              onError: (exception, stackTrace) {
-                                                print(
-                                                    "❌ فشل تحميل صورة الفئة: ${state.subCategories[index].image}");
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                        AppText(
-                                          text:
-                                              state.subCategories[index].name ??
-                                                  '',
-                                          color: AppColors.primaryColor,
-                                        ),
-                                      ],
-                                    ),
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
-                                ],
-                              ),
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              height: 133.h,
+                                              width: 150.w,
+                                              decoration: BoxDecoration(
+                                                color: Theme.of(context)
+                                                            .scaffoldBackgroundColor ==
+                                                        Colors.black
+                                                    ? Colors.grey[800]
+                                                    : Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
+                                                image: DecorationImage(
+                                                  image: NetworkImage(state
+                                                          .subCategories[index]
+                                                          .image ??
+                                                      ''),
+                                                  fit: BoxFit.cover,
+                                                  onError:
+                                                      (exception, stackTrace) {
+                                                    print(
+                                                        "❌ فشل تحميل صورة الفئة: ${state.subCategories[index].image}");
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            AppText(
+                                              text: state.subCategories[index]
+                                                      .name ??
+                                                  '',
+                                              color: AppColors.primaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          if (subCategoryCubit.totalPages > 1)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                IconButton(
+                                  onPressed: subCategoryCubit.currentPage > 1
+                                      ? () {
+                                          subCategoryCubit.fetchPreviousPage();
+                                        }
+                                      : null,
+                                  icon: Icon(Icons.arrow_back_ios,
+                                      color: AppColors.primaryColor),
+                                ),
+                                Text(
+                                  "${subCategoryCubit.currentPage} من ${subCategoryCubit.totalPages}",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.primaryColor),
+                                ),
+                                IconButton(
+                                  onPressed: subCategoryCubit.currentPage <
+                                          subCategoryCubit.totalPages
+                                      ? () {
+                                          subCategoryCubit.fetchNextPage();
+                                        }
+                                      : null,
+                                  icon: Icon(Icons.arrow_forward_ios,
+                                      color: AppColors.primaryColor),
+                                ),
+                              ],
                             ),
-                          );
-                        },
+                        ],
                       ),
                     );
                   } else {

@@ -78,7 +78,8 @@ class _HomePageState extends State<HomePage> {
     final box = GetStorage();
     String? userName = box.read('userName') ?? '';
     final categoryCubit = context.watch<CategoryCubit>(); // ✅ يراقب التغييرات
-
+    final category1Cubit =
+        context.read<SubCategoryCubit>(); // ✅ يراقب التغييرات
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
@@ -185,7 +186,8 @@ class _HomePageState extends State<HomePage> {
                                           );
                                           context
                                               .read<SubCategoryCubit>()
-                                              .fetchSubCategories(category.id);
+                                              .fetchSubCategories(
+                                                  id: category.id);
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(8),
@@ -362,6 +364,37 @@ class _HomePageState extends State<HomePage> {
                                   );
                                 },
                               ),
+                            ),
+                          if (category1Cubit.totalPages > 1)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                IconButton(
+                                  onPressed: category1Cubit.currentPage > 1
+                                      ? () {
+                                          category1Cubit.fetchPreviousPage();
+                                        }
+                                      : null,
+                                  icon: Icon(Icons.arrow_back_ios,
+                                      color: AppColors.primaryColor),
+                                ),
+                                Text(
+                                  "${category1Cubit.currentPage} من ${category1Cubit.totalPages}",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.primaryColor),
+                                ),
+                                IconButton(
+                                  onPressed: category1Cubit.currentPage <
+                                          category1Cubit.totalPages
+                                      ? () {
+                                          category1Cubit.fetchNextPage();
+                                        }
+                                      : null,
+                                  icon: Icon(Icons.arrow_forward_ios,
+                                      color: AppColors.primaryColor),
+                                ),
+                              ],
                             ),
                         ],
                       );

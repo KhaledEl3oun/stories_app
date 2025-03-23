@@ -1,3 +1,51 @@
+class SubStoryResponse {
+  final int? results;
+  final int? totalStories;
+  final int? totalPages;
+  final int? currentPage;
+  final bool? hasNextPage;
+  final bool? hasPrevPage;
+  final List<SubStoryModel> data;
+
+  SubStoryResponse({
+    this.results,
+    this.totalStories,
+    this.totalPages,
+    this.currentPage,
+    this.hasNextPage,
+    this.hasPrevPage,
+    required this.data,
+  });
+
+  // تحويل JSON إلى كائن Dart
+  factory SubStoryResponse.fromJson(Map<String, dynamic> json) {
+    return SubStoryResponse(
+      results: json['results'] as int?,
+      totalStories: json['totalStories'] as int?,
+      totalPages: json['totalPages'] as int?,
+      currentPage: json['currentPage'] as int?,
+      hasNextPage: json['hasNextPage'] as bool?,
+      hasPrevPage: json['hasPrevPage'] as bool?,
+      data: (json['data'] as List<dynamic>)
+          .map((story) => SubStoryModel.fromJson(story))
+          .toList(),
+    );
+  }
+
+  // تحويل كائن Dart إلى JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'results': results,
+      'totalStories': totalStories,
+      'totalPages': totalPages,
+      'currentPage': currentPage,
+      'hasNextPage': hasNextPage,
+      'hasPrevPage': hasPrevPage,
+      'data': data.map((story) => story.toJson()).toList(),
+    };
+  }
+}
+
 class SubStoryModel {
   final String? id;
   final String? title;
