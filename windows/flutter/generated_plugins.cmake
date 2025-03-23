@@ -4,12 +4,10 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   cloud_firestore
-<<<<<<< HEAD
   file_selector_windows
-=======
   firebase_auth
->>>>>>> 9ae9e37eeb2f6a027fb6735e992c6cb6be7ed202
   firebase_core
+  permission_handler_windows
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

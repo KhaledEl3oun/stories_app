@@ -13,6 +13,9 @@ class AuthLoggedIn extends AuthState {
   AuthLoggedIn(this.user);
 }
 
+
+
+
 class AuthRegistered extends AuthState {
   final UserModel user;
   AuthRegistered(this.user);
@@ -28,7 +31,6 @@ class AuthFailure extends AuthState {
   AuthFailure(this.error);
 }
 
-<<<<<<< HEAD
 class AuthUpdated extends AuthState {
   final UserModel user;
   AuthUpdated(this.user);
@@ -38,10 +40,12 @@ class AuthUpdated extends AuthState {
 class AuthError extends AuthState {
   final String message;
   AuthError(this.message);
-=======
+}
+
 class AuthGoogleSuccess extends AuthState {
   final String token;
   final String username;
   AuthGoogleSuccess(this.token, this.username);
->>>>>>> 9ae9e37eeb2f6a027fb6735e992c6cb6be7ed202
+
+
 }

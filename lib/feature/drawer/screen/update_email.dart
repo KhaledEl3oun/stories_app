@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stories_app/core/extension/navigator.dart';
 import 'package:stories_app/core/route/app_routes.dart';
@@ -21,106 +20,125 @@ class UpdateEmail extends StatelessWidget {
       endDrawer: CustomDrawer(),
       body: 
       
-      SingleChildScrollView(
-        child: AppPadding(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        height: 40,
-                        width: 40,
-                        child: Image.asset('assets/images/moon.png'),
-                      ),
-                      const SizedBox(width: 8),
-                      GestureDetector(
-                        onTap:() {
-                          context.pushNamed(AppRoutes.notificationScreen);
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white,
-                          ),
-                          height: 40,
-                          width: 40,
-                          child: Image.asset('assets/images/notification.png'),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      AppText(
-                        text: 'تعديل البريد الالكترونى',
-                        textStyle: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(color: AppColors.primaryColor),
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(onPressed: (){
-                        Navigator.pop(context);
-                      }, icon: const Icon(Icons.arrow_forward))
-                    ],
-                  ),
-                ],
+      Container(
+         decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                Theme.of(context).scaffoldBackgroundColor ==
+                        const Color(0xff191201)
+                    ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
+                    : 'assets/images/lightBg.png', // ✅ خلفية اللايت
               ),
-              const SizedBox(height: 50),
-              CustomInputField(
-                controller: _emailController, 
-                label: "البريد الالكترونى",
-                onChanged: (value) {},
-              ),
-              const SizedBox(height: 50),
-
-              BlocConsumer<AuthCubit, AuthState>(
-                listener: (context, state) {
-                  if (state is AuthUpdated) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("✅ تم تحديث الايميل بنجاح!")),
-                    );
-                    Navigator.pop(context);
-                  } else if (state is AuthFailure) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("❌ ${state.error}")),
-                    );
-                  }
-                },
-                builder: (context, state) {
-                  return Center(
-                    child: AppButton(
-                      minimumSize: MaterialStateProperty.all(
-                        const Size(380, 50),
-                      ),
-                      onPressed: state is AuthLoading
-                          ? null
-                          : () {
-                              String newEmail = _emailController.text.trim();
-                              if (newEmail.isNotEmpty) {
-                                AuthCubit.get(context).updateUserData(
-                                  email: newEmail,
-                                );
-                              }
-                            },
-                      text: state is AuthLoading
-                          ? "جاري التحديث..."
-                          : "حفظ التعديلات",
-                    ),
-                  );
-                },
-              ),
-            ],
+              fit: BoxFit.cover, // ✅ جعل الصورة تغطي الشاشة بالكامل
+            ),
           ),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: AppPadding(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const SizedBox(height: 50),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                ),
+                                height: 40,
+                                width: 40,
+                                child: Image.asset('assets/images/moon.png'),
+                              ),
+                              const SizedBox(width: 8),
+                              GestureDetector(
+                                onTap:() {
+                                  context.pushNamed(AppRoutes.notificationScreen);
+                                },
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                  ),
+                                  height: 40,
+                                  width: 40,
+                                  child: Image.asset('assets/images/notification.png'),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              AppText(
+                                text: 'تعديل البريد الالكترونى',
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(color: AppColors.primaryColor),
+                              ),
+                              const SizedBox(width: 10),
+                              IconButton(onPressed: (){
+                                Navigator.pop(context);
+                              }, icon: const Icon(Icons.arrow_forward))
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 50),
+                      CustomInputField(
+                        controller: _emailController, 
+                        label: "البريد الالكترونى",
+                        onChanged: (value) {},
+                      ),
+                      const SizedBox(height: 50),
+              
+                      BlocConsumer<AuthCubit, AuthState>(
+                        listener: (context, state) {
+                          if (state is AuthUpdated) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("✅ تم تحديث الايميل بنجاح!")),
+                            );
+                            Navigator.pop(context);
+                          } else if (state is AuthFailure) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("❌ ${state.error}")),
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          return Center(
+                            child: AppButton(
+                              minimumSize: MaterialStateProperty.all(
+                                const Size(380, 50),
+                              ),
+                              onPressed: state is AuthLoading
+                                  ? null
+                                  : () {
+                                      String newEmail = _emailController.text.trim();
+                                      if (newEmail.isNotEmpty) {
+                                        AuthCubit.get(context).updateUserData(
+                                          email: newEmail,
+                                        );
+                                      }
+                                    },
+                              text: state is AuthLoading
+                                  ? "جاري التحديث..."
+                                  : "حفظ التعديلات",
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
