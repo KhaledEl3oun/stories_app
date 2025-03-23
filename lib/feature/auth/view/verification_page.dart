@@ -30,75 +30,88 @@ class _VerificationPageState extends State<VerificationPage> {
       create: (context) => AuthCubit(),
       child: Scaffold(
         body: 
-        SingleChildScrollView(
-          child: AppPadding(
-            child: Center(
-              child: Column(
-                children: [
-                  const SizedBox(height: 30),
-                  const CustomHeaderRow(title: 'استعادة كلمة المرور'),
-                  SizedBox(height: 30.h),
-                  Center(
-                    child: Image.asset(
-                      AppImages.logoForgetPass,
-                      fit: BoxFit.cover,
+        Container(
+           decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                Theme.of(context).scaffoldBackgroundColor ==
+                        const Color(0xff191201)
+                    ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
+                    : 'assets/images/lightBg.png', // ✅ خلفية اللايت
+              ),
+              fit: BoxFit.cover, // ✅ جعل الصورة تغطي الشاشة بالكامل
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: AppPadding(
+              child: Center(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    const CustomHeaderRow(title: 'استعادة كلمة المرور'),
+                    SizedBox(height: 30.h),
+                    Center(
+                      child: Image.asset(
+                        AppImages.logoForgetPass,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 20.h),
-                  const Center(
-                    child: AppText(text: 'أدخل الرقم السري المؤقت'),
-                  ),
-                  SizedBox(height: 50.h),
-
-                  Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: OtpTextField(
-                      onSubmit: (value) {
-                        setState(() {
-                          otpCode = value; // حفظ الكود المدخل
-                        });
+                    SizedBox(height: 20.h),
+                    const Center(
+                      child: AppText(text: 'أدخل الرقم السري المؤقت'),
+                    ),
+                    SizedBox(height: 50.h),
+          
+                    Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: OtpTextField(
+                        onSubmit: (value) {
+                          setState(() {
+                            otpCode = value; // حفظ الكود المدخل
+                          });
+                        },
+                        numberOfFields: 4,
+                        fieldHeight: 50.h,
+                        fieldWidth: 50.h,
+                        cursorColor: Colors.blue,
+                        contentPadding: const EdgeInsets.all(2),
+                        focusedBorderColor: Colors.orangeAccent,
+                        showFieldAsBox: true,
+                      ),
+                    ),
+          
+                    const SizedBox(height: 40),
+          
+                    BlocConsumer<AuthCubit, AuthState>(
+                      listener: (context, state) {
+                        if (state is AuthSuccess) {
+                          context.pushNamed(AppRoutes.changePasswordPage); // الانتقال بعد النجاح
+                        } else if (state is AuthFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(state.error)),
+                          );
+                         
+                        }
                       },
-                      numberOfFields: 4,
-                      fieldHeight: 50.h,
-                      fieldWidth: 50.h,
-                      cursorColor: Colors.blue,
-                      contentPadding: const EdgeInsets.all(2),
-                      focusedBorderColor: Colors.orangeAccent,
-                      showFieldAsBox: true,
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  BlocConsumer<AuthCubit, AuthState>(
-                    listener: (context, state) {
-                      if (state is AuthSuccess) {
-                        context.pushNamed(AppRoutes.changePasswordPage); // الانتقال بعد النجاح
-                      } else if (state is AuthFailure) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(state.error)),
+                      builder: (context, state) {
+                        return Center(
+                          child: AppButton(
+                            minimumSize: MaterialStateProperty.all(const Size(380, 50)),
+                            onPressed: state is AuthLoading
+                                ? null
+                                : () {
+                                    BlocProvider.of<AuthCubit>(context)
+                                        .verifyResetCode(otpCode);
+                                  },
+                            text: state is AuthLoading ? "جاري التحقق..." : "استعادة كلمة المرور",
+                          ),
                         );
-                       
-                      }
-                    },
-                    builder: (context, state) {
-                      return Center(
-                        child: AppButton(
-                          minimumSize: MaterialStateProperty.all(const Size(380, 50)),
-                          onPressed: state is AuthLoading
-                              ? null
-                              : () {
-                                  BlocProvider.of<AuthCubit>(context)
-                                      .verifyResetCode(otpCode);
-                                },
-                          text: state is AuthLoading ? "جاري التحقق..." : "استعادة كلمة المرور",
-                        ),
-                      );
-                    },
-                  ),
-
-                  const SizedBox(height: 80),
-                ],
+                      },
+                    ),
+          
+                    const SizedBox(height: 80),
+                  ],
+                ),
               ),
             ),
           ),

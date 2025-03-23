@@ -1,16 +1,17 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:stories_app/core/widget/custom_app_image.dart';
+import 'package:stories_app/core/widget/text_failed/custom_textfailed%20_search.dart';
+import 'package:stories_app/feature/drawer/drawer_page.dart';
 import 'package:stories_app/feature/home/controller/category_cubit.dart';
 import 'package:stories_app/feature/home/controller/sub_category_cubit.dart';
+import 'package:stories_app/feature/home/views/widget/custom_row_header.dart';
+import 'package:stories_app/feature/on_boarding/on_boarding.dart';
 
 import '../controller/single_details_story_cubit.dart';
-import 'home.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,57 +22,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  @override
-  void initState() {
-    super.initState();
-    getDeviceToken();
-    setupFirebaseMessagingListener();
-    requestNotificationPermission();
-  }
-
-  void getDeviceToken() async {
-    try {
-      String? token = await FirebaseMessaging.instance.getToken();
-      if (token != null) {
-        print("📲 Device Token: $token");
-      } else {
-        print("❌ لم يتم الحصول على Device Token");
-      }
-    } catch (e) {
-      print("❌ خطأ أثناء الحصول على Device Token: $e");
-    }
-  }
-
-  void setupFirebaseMessagingListener() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print(
-          "📩 إشعار مستلم أثناء تشغيل التطبيق: ${message.notification?.title} - ${message.notification?.body}");
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-              "${message.notification?.title} - ${message.notification?.body}"),
-          duration: Duration(seconds: 3),
-        ),
-      );
-    });
-  }
-
-  void requestNotificationPermission() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print("✅ تم منح صلاحيات الإشعارات");
-    } else {
-      print("❌ رفض المستخدم منح الصلاحيات");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

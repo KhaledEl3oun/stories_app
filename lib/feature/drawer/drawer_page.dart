@@ -18,8 +18,8 @@ class CustomDrawer extends StatelessWidget {
       child: Drawer(
         backgroundColor:
             Theme.of(context).scaffoldBackgroundColor == Color(0xff191201)
-                ? Colors.grey[900]
-                : Colors.white,
+                 ? Color(0xff2b1e08)
+              : Colors.white,
         child: AppPadding(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end, // ✅ محاذاة للعناصر لليمين

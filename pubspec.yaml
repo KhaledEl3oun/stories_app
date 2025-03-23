@@ -32,6 +32,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   dio: ^5.8.0+1
   easy_localization: null
+  firebase_auth: ^5.5.1
   firebase_core: ^3.12.1
   firebase_messaging: ^15.2.4
   flutter:
@@ -41,17 +42,30 @@ dependencies:
   flutter_otp_text_field: ^1.1.3+2
   flutter_rating_bar: null
   flutter_screenutil: ^5.9.3
+  flutter_svg: ^2.0.10+1
   gap: ^3.0.1
   get_storage: ^2.1.1
-  x_validators: ^1.0.8
-  flutter_svg: ^2.0.10+1
-  lottie: ^3.0.0
   google_sign_in: ^6.2.1
-  firebase_auth: ^5.5.1
+  image_editor_plus: ^1.0.6
+  image_picker: ^1.1.2
+  lottie: ^3.0.0
+  path_provider: ^2.1.5
+  permission_handler: ^11.4.0
+  smooth_page_indicator: ^1.2.1
+  x_validators: ^1.0.8
 dev_dependencies:
+  flutter_launcher_icons: ^0.14.3
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/icon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/icon.png"
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

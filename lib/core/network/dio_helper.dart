@@ -17,6 +17,7 @@ class DioHelper {
     required String url,
     Map<String, dynamic>? query,
     Map<String, dynamic>? headers,
+    String? token,
   }) async {
     return await dio.get(url,
         queryParameters: query, options: Options(headers: headers));
@@ -32,13 +33,31 @@ class DioHelper {
   }
 
   // 🟠 طلب **PUT** لتحديث البيانات
-  static Future<Response> putData({
-    required String url,
-    required Map<String, dynamic> data,
-    Map<String, dynamic>? headers,
-  }) async {
-    return await dio.put(url, data: data, options: Options(headers: headers));
-  }
+
+ static Future<Response> putData({
+  required String url,
+  required Map<String, dynamic> data,
+  String? token,
+  required Map<String, String> headers,
+}) async {
+  final finalHeaders = {
+    "Content-Type": "application/json",
+    if (token != null && token.isNotEmpty) "Authorization": "Bearer $token",
+  };
+
+  // ✅ طباعة الهيدرز للتأكد إن التوكين بيتبعت
+  print("🔵 Headers being sent: $finalHeaders");
+
+  return await dio.put(
+    url,
+    data: data,
+    options: Options(headers: finalHeaders),
+  );
+}
+
+
+
+
 
   // 🟠 طلب **patch** لتحديث البيانات
   static Future<Response> patchData({

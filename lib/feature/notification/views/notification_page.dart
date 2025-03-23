@@ -9,81 +9,99 @@ class NotificationPage extends StatelessWidget {
     return Scaffold(
       body: 
       
-      SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              const SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      context.read<ThemeCubit>().toggleTheme();
-
-                    },
-                    child: Container(
-                      decoration:  BoxDecoration(
-                        color: Theme.of(context)
-                                       .scaffoldBackgroundColor ==
-                                     Color(0xff191201)
-                                                ? Color(0xff2b1e08)
-                                                : Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      height: 40,
-                      width: 40,
-                      child: Image.asset('assets/images/moon.png'),
-                    ),
-                  ),
-                  Row(
+      Container(
+         decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              Theme.of(context).scaffoldBackgroundColor == const Color(0xff191201)
+                  ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
+                  : 'assets/images/lightBg.png', // ✅ خلفية اللايت
+            ),
+            fit: BoxFit.cover, // ✅ جعل الصورة تغطي الشاشة بالكامل
+          ),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      AppText(
-                        text: 'الاشعارات',
-                        textStyle: Theme.of(context)
-                            .textTheme
-                            .bodyLarge
-                            ?.copyWith(color: AppColors.primaryColor),
+                      const SizedBox(height: 50),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              context.read<ThemeCubit>().toggleTheme();
+              
+                            },
+                            child: Container(
+                              decoration:  BoxDecoration(
+                                color: Theme.of(context)
+                                               .scaffoldBackgroundColor ==
+                                             Color(0xff191201)
+                                                        ? Color(0xff2b1e08)
+                                                        : Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              height: 40,
+                              width: 40,
+                              child: Image.asset('assets/images/moon.png'),
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              AppText(
+                                text: 'الاشعارات',
+                                textStyle: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(color: AppColors.primaryColor),
+                              ),
+                              const SizedBox(width: 10),
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: const Icon(Icons.arrow_forward)),
+                            ],
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.arrow_forward)),
+                      ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: 5,
+                          itemBuilder: (context, index) {
+                          return  Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(16),
+                                  color: Theme.of(context)
+                                               .scaffoldBackgroundColor ==
+                                             Color(0xff191201)
+                                                        ? Color(0xff2b1e08)
+                                                        : Colors.white,
+                                ),
+                                height: 70,
+                                child: const Padding(
+                                  padding: EdgeInsets.only(left: 8.0,right: 8),
+                                  child: AppText(
+                                      text: 'قصة جديدة مميزة متاحة الآن لتساعد طفلك في تعلم كلمات جديدة بطريقة ممتعة!'),
+                                ),
+                              ),
+                          );
+                          })
                     ],
                   ),
-                ],
+                ),
               ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                  return  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                          color: Theme.of(context)
-                                       .scaffoldBackgroundColor ==
-                                     Color(0xff191201)
-                                                ? Color(0xff2b1e08)
-                                                : Colors.white,
-                        ),
-                        height: 70,
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 8.0,right: 8),
-                          child: AppText(
-                              text: 'قصة جديدة مميزة متاحة الآن لتساعد طفلك في تعلم كلمات جديدة بطريقة ممتعة!'),
-                        ),
-                      ),
-                  );
-                  })
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

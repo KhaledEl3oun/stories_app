@@ -1,16 +1,19 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:stories_app/core/shared.dart';
+
 import '../../../core/network/dio_helper.dart';
 import '../../../core/network/endpoints.dart';
-import '../model/user_model.dart';
 import '../model/message_model.dart';
+import '../model/user_model.dart';
 import 'auth_state.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthCubit extends Cubit<AuthState> {
+  
   AuthCubit() : super(AuthInitial());
 
   late UserModel userModel;
@@ -27,6 +30,7 @@ class AuthCubit extends Cubit<AuthState> {
       // 🔹 تسجيل الدخول باستخدام Google
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
+
         emit(AuthFailure("تم إلغاء تسجيل الدخول من قبل المستخدم."));
         return;
       }
@@ -48,6 +52,7 @@ class AuthCubit extends Cubit<AuthState> {
       final User? user = userCredential.user;
       debugPrint("🟢 User: $user");
       if (user == null) {
+        print("❌ User is null");
         emit(AuthFailure("لم يتم استرجاع بيانات المستخدم."));
         return;
       }
@@ -73,6 +78,7 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthGoogleSuccess(token, user.displayName ?? "مستخدم غير معروف"));
     } catch (e) {
       debugPrint("🔴 Error: $e");
+      print("❌ Error: $e");
       emit(AuthFailure("حدث خطأ أثناء تسجيل الدخول: $e"));
     }
   }
@@ -124,7 +130,10 @@ class AuthCubit extends Cubit<AuthState> {
       );
       if (response.statusCode == 201 && response.data.containsKey("data")) {
         final userModel = UserModel.fromJson(response.data);
-        box.write('userName', userName);
+      //  box.write('userName', userName);
+        box.write('userModel' , userModel);
+        currentUser = box.read('userModel');
+
         emit(AuthRegistered(userModel));
       } else {
         emit(AuthFailure("فشل إنشاء الحساب، استجابة غير متوقعة!"));
@@ -190,7 +199,7 @@ class AuthCubit extends Cubit<AuthState> {
         data: {
           'newPassword': newPassword,
           'confirmNewPassword': confirmNewPassword,
-        },
+        }, headers: {},
       );
 
       if (response.statusCode == 200) {
@@ -212,4 +221,36 @@ class AuthCubit extends Cubit<AuthState> {
     box.remove('userName');
     Navigator.pushReplacementNamed(context, '/loginScreen');
   }
+
+ void updateUserData({String? userName, String? email, String? phone}) async {
+  emit(AuthLoading());
+  try {
+    String? token = box.read('token'); // 🟢 جلب التوكين
+    print("🔵 Loaded Token: ${token ?? 'No Token Found'}"); // ✅ طباعة التوكين قبل الإرسال
+
+    final response = await DioHelper.putData(
+      url: "https://app.balady-sa.pro/api/v1/user/updateMyData",
+      data: {
+        if (userName != null) 'userName': userName,
+        if (email != null) 'email': email,
+        if (phone != null) 'phone': phone,
+      },
+      token: token,
+      headers: {},
+    );
+
+    final userModel = UserModel.fromJson(response.data);
+    box.write('userName', userModel.userName);
+    box.write('email', userModel.email);
+    box.write('phone', userModel.phone);
+    emit(AuthUpdated(userModel));
+  } catch (error) {
+    print("❌ Error: $error");
+    emit(AuthFailure("❌ حدث خطأ أثناء تحديث البيانات!"));
+  }
+}
+
+
+
+
 }
