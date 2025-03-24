@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stories_app/core/network/dio_helper.dart';
 import 'package:stories_app/core/network/endpoints.dart';
+import 'package:stories_app/core/theme/themes.dart';
 import 'package:stories_app/feature/home/model/category_model.dart';
 import 'package:stories_app/feature/home/model/story_model.dart';
 
@@ -13,6 +14,8 @@ class CategoryCubit extends Cubit<CategoryState> {
   CategoryCubit() : super(CategoryInitial()) {
     searchController.addListener(_onSearchTextChanged);
   }
+  int currentPage = 1; // الصفحة الحالية
+  int totalPages = 1; // العدد الإجمالي للصفحات
 
   List<CategoryModel> categories = [];
   List<StoryModel> stories = [];
@@ -22,36 +25,46 @@ class CategoryCubit extends Cubit<CategoryState> {
   void _onSearchTextChanged() {
     isSearchActive = searchController.text.isNotEmpty;
     emit(CategorySearchStateChanged(isSearchActive));
+
+    // ✅ استدعاء البحث مباشرة عند الكتابة
     fetchCategoriesAndStories();
   }
 
-  Future<void> fetchCategoriesAndStories() async {
+  Future<void> fetchCategoriesAndStories({int page = 1}) async {
     emit(CategoryLoading());
-
     try {
-      // تحميل الأقسام
-      final categoryResponse = await DioHelper.getData(url: Endpoints.category);
-      if (categoryResponse.statusCode == 200 && categoryResponse.data['data'] is List) {
+      final categoryResponse = await DioHelper.getData(
+          url: Endpoints.category, query: {'search': searchController.text});
+
+      if (categoryResponse.statusCode == 200 &&
+          categoryResponse.data['data'] is List) {
         categories = (categoryResponse.data['data'] as List)
             .map((category) => CategoryModel.fromJson(category))
             .toList();
       } else {
-        emit(CategoryFailure('❌ خطأ أثناء تحميل الأقسام'));
+        emit(CategoryFailure('❌ خطأ أثناء تحميل الفئات'));
         return;
       }
 
-      // تحميل القصص بدون Pagination
-      final storyResponse = await DioHelper.getData(url: Endpoints.story);
-      if (storyResponse.statusCode == 200 && storyResponse.data['data'] is List) {
-        stories = (storyResponse.data['data'] as List)
-            .map((story) => StoryModel.fromJson(story))
-            .toList();
+      final response = await DioHelper.getData(
+        url: Endpoints.story,
+        query: {
+          'search': searchController.text,
+          'page': page,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final storyResponse = StoryResponse.fromJson(response.data);
+        currentPage = page;
+        totalPages = storyResponse.totalPages;
+        stories = storyResponse.data; // تحديث القصص الجديدة
       } else {
         emit(CategoryFailure('❌ خطأ أثناء تحميل القصص'));
         return;
       }
 
-      emit(CategorySuccess(List.from(categories), List.from(stories)));
+      emit(CategorySuccess(categories, stories));
     } catch (e) {
       emit(CategoryFailure("فشل الاتصال بالسيرفر"));
     }
@@ -61,5 +74,17 @@ class CategoryCubit extends Cubit<CategoryState> {
   Future<void> close() {
     searchController.dispose();
     return super.close();
+  }
+
+  void fetchNextPage() {
+    if (currentPage < totalPages) {
+      fetchCategoriesAndStories(page: currentPage + 1);
+    }
+  }
+
+  void fetchPreviousPage() {
+    if (currentPage > 1) {
+      fetchCategoriesAndStories(page: currentPage - 1);
+    }
   }
 }

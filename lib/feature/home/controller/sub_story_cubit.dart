@@ -13,6 +13,10 @@ class SubStoryCubit extends Cubit<SubStoryState> {
   SubStoryCubit() : super(SubStoryInitial()) {
     searchController.addListener(_onSearchTextChanged);
   }
+
+  int currentPage = 1; // الصفحة الحالية
+  int totalPages = 1; // العدد الإجمالي للصفحات
+
   List<SubStoryModel> subStory = [];
   TextEditingController searchController = TextEditingController();
   bool isSearchActive = false;
@@ -22,33 +26,52 @@ class SubStoryCubit extends Cubit<SubStoryState> {
     emit(SearchStateChanged(isSearchActive));
 
     // ✅ استدعاء البحث مباشرة عند الكتابة
-    fetchSubStory(idc);
+    fetchSubStory(id: idc);
   }
 
-  Future<void> fetchSubStory(String id) async {
+  Future<void> fetchSubStory({String? id, int page = 1}) async {
     emit(SubStoryLoading());
     try {
       // ✅ تحميل الفئات
       final subStoryResponse = await DioHelper.getData(
-          url: Endpoints.substory(id),
-          headers: {'Authorization': 'Bearer ${GetStorage().read('token')}'},
-          query: {'search': searchController.text});
+        url: Endpoints.substory(id),
+        headers: {'Authorization': 'Bearer ${GetStorage().read('token')}'},
+        query: {'search': searchController.text, 'page': page},
+      );
       print("✅ الفئات المستلمة من API: ${subStoryResponse.data}");
 
       if (subStoryResponse.statusCode == 200 &&
           subStoryResponse.data['data'] is List) {
-        subStory = (subStoryResponse.data['data'] as List)
-            .map((subcategory) => SubStoryModel.fromJson(subcategory))
-            .toList();
-        idc = id;
+        // تحويل الاستجابة إلى موديل SubStoryResponse
+        SubStoryResponse subStoryResponseData =
+            SubStoryResponse.fromJson(subStoryResponse.data);
+
+        // إذا كانت الاستجابة تحتوي على بيانات صحيحة، نقوم بتخزين البيانات في المتغير
+        subStory = subStoryResponseData.data;
+        idc = id!;
+        currentPage = page;
+        totalPages = subStoryResponseData.totalPages!;
+        // إرسال البيانات إلى الحالة الناجحة
+        emit(SubStorySuccess(subStory));
       } else {
         emit(SubStoryFailure('❌ خطأ أثناء تحميل الفئات'));
         return;
       }
-      emit(SubStorySuccess(subStory));
     } catch (e) {
       print("❌ فشل الاتصال بالسيرفر: $e");
       emit(SubStoryFailure("فشل الاتصال بالسيرفر"));
+    }
+  }
+
+  void fetchNextPage() {
+    if (currentPage < totalPages) {
+      fetchSubStory(id: idc, page: currentPage + 1);
+    }
+  }
+
+  void fetchPreviousPage() {
+    if (currentPage > 1) {
+      fetchSubStory(id: idc, page: currentPage - 1);
     }
   }
 }

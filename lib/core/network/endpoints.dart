@@ -10,7 +10,7 @@ class Endpoints {
   static const String addfavorite = '/api/v1/favouriteList';
   static const String changeMyPasswordAccount =
       '/api/v1/user/changeMyPasswordAccount';
-  static String subCategory(String id) {
+  static String subCategory(String? id) {
     return '/api/v1/categories/$id/subcategories';
   }
 
@@ -22,7 +22,7 @@ class Endpoints {
     return '/api/v1/story/$id/unmark-as-read';
   }
 
-  static String substory(String id) {
+  static String substory(String? id) {
     return '/api/v1/subCategories/$id/stories';
   }
 

@@ -42,4 +42,39 @@ class StoryModel {
     );
   }
 }
-  
+
+// 🟢 موديل الاستجابة العامة عند جلب القصص
+class StoryResponse {
+  final int results;
+  final int totalStories;
+  final int totalPages;
+  final int currentPage;
+  final bool hasNextPage;
+  final bool hasPrevPage;
+  final List<StoryModel> data;
+
+  StoryResponse({
+    required this.results,
+    required this.totalStories,
+    required this.totalPages,
+    required this.currentPage,
+    required this.hasNextPage,
+    required this.hasPrevPage,
+    required this.data,
+  });
+
+  factory StoryResponse.fromJson(Map<String, dynamic> json) {
+    return StoryResponse(
+      results: json['results'] ?? 0,
+      totalStories: json['totalStories'] ?? 0,
+      totalPages: json['totalPages'] ?? 0,
+      currentPage: json['currentPage'] ?? 0,
+      hasNextPage: json['hasNextPage'] ?? false,
+      hasPrevPage: json['hasPrevPage'] ?? false,
+      data: (json['data'] as List?)
+              ?.map((story) => StoryModel.fromJson(story))
+              .toList() ??
+          [],
+    );
+  }
+}

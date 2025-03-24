@@ -1,3 +1,51 @@
+class SubCategoryResponse {
+  final int? results;
+  final int? totalSubCategories;
+  final int? totalPages;
+  final int? currentPage;
+  final bool? hasNextPage;
+  final bool? hasPrevPage;
+  final List<SubCategoryModel> data;
+
+  SubCategoryResponse({
+    this.results,
+    this.totalSubCategories,
+    this.totalPages,
+    this.currentPage,
+    this.hasNextPage,
+    this.hasPrevPage,
+    required this.data,
+  });
+
+  // تحويل JSON إلى كائن Dart
+  factory SubCategoryResponse.fromJson(Map<String, dynamic> json) {
+    return SubCategoryResponse(
+      results: json['results'] as int?,
+      totalSubCategories: json['totalSubCategories'] as int?,
+      totalPages: json['totalPages'] as int?,
+      currentPage: json['currentPage'] as int?,
+      hasNextPage: json['hasNextPage'] as bool?,
+      hasPrevPage: json['hasPrevPage'] as bool?,
+      data: (json['data'] as List)
+          .map((item) => SubCategoryModel.fromJson(item))
+          .toList(),
+    );
+  }
+
+  // تحويل كائن Dart إلى JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'results': results,
+      'totalSubCategories': totalSubCategories,
+      'totalPages': totalPages,
+      'currentPage': currentPage,
+      'hasNextPage': hasNextPage,
+      'hasPrevPage': hasPrevPage,
+      'data': data.map((subCategory) => subCategory.toJson()).toList(),
+    };
+  }
+}
+
 class SubCategoryModel {
   final String? id;
   final String? name;
