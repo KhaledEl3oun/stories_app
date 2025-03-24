@@ -67,7 +67,7 @@ class FavoritePage extends StatelessWidget {
                                     ),
                                     height: 40,
                                     width: 40,
-                                    child: Image.asset('assets/images/moon.png'),
+                                    child: AppImage('assets/images/moon.svg'),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -87,7 +87,7 @@ class FavoritePage extends StatelessWidget {
                                     height: 40,
                                     width: 40,
                                     child:
-                                        Image.asset('assets/images/notification.png'),
+                                        AppImage('assets/images/notification.svg'),
                                   ),
                                 ),
                               ],

@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stories_app/core/network/dio_helper.dart';
 import 'package:stories_app/core/network/endpoints.dart';
+import 'package:stories_app/core/theme/themes.dart';
 import 'package:stories_app/feature/home/model/category_model.dart';
 import 'package:stories_app/feature/home/model/story_model.dart';
 
@@ -24,12 +25,13 @@ class CategoryCubit extends Cubit<CategoryState> {
   void _onSearchTextChanged() {
     isSearchActive = searchController.text.isNotEmpty;
     emit(CategorySearchStateChanged(isSearchActive));
+
+    // ✅ استدعاء البحث مباشرة عند الكتابة
     fetchCategoriesAndStories();
   }
 
   Future<void> fetchCategoriesAndStories({int page = 1}) async {
     emit(CategoryLoading());
-
     try {
       final categoryResponse = await DioHelper.getData(
           url: Endpoints.category, query: {'search': searchController.text});
@@ -40,7 +42,7 @@ class CategoryCubit extends Cubit<CategoryState> {
             .map((category) => CategoryModel.fromJson(category))
             .toList();
       } else {
-        emit(CategoryFailure('❌ خطأ أثناء تحميل الأقسام'));
+        emit(CategoryFailure('❌ خطأ أثناء تحميل الفئات'));
         return;
       }
 
@@ -57,19 +59,12 @@ class CategoryCubit extends Cubit<CategoryState> {
         currentPage = page;
         totalPages = storyResponse.totalPages;
         stories = storyResponse.data; // تحديث القصص الجديدة
-
-      // تحميل القصص بدون Pagination
-      final storyResponse = await DioHelper.getData(url: Endpoints.story);
-      if (storyResponse.statusCode == 200 && storyResponse.data['data'] is List) {
-        stories = (storyResponse.data['data'] as List)
-            .map((story) => StoryModel.fromJson(story))
-            .toList();
       } else {
         emit(CategoryFailure('❌ خطأ أثناء تحميل القصص'));
         return;
       }
 
-      emit(CategorySuccess(List.from(categories), List.from(stories)));
+      emit(CategorySuccess(categories, stories));
     } catch (e) {
       emit(CategoryFailure("فشل الاتصال بالسيرفر"));
     }

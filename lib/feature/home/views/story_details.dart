@@ -28,10 +28,11 @@ class StoryDetailsPage extends StatelessWidget {
       key: _scaffoldKey,
       endDrawer: CustomDrawer(),
       body: Container(
-         decoration: BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
-              Theme.of(context).scaffoldBackgroundColor == const Color(0xff191201)
+              Theme.of(context).scaffoldBackgroundColor ==
+                      const Color(0xff191201)
                   ? 'assets/images/darkBg.png' // ✅ خلفية الدارك
                   : 'assets/images/lightBg.png', // ✅ خلفية اللايت
             ),
@@ -65,7 +66,9 @@ class StoryDetailsPage extends StatelessWidget {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        context.read<ThemeCubit>().toggleTheme();
+                                        context
+                                            .read<ThemeCubit>()
+                                            .toggleTheme();
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -78,13 +81,15 @@ class StoryDetailsPage extends StatelessWidget {
                                         ),
                                         height: 40,
                                         width: 40,
-                                        child: Image.asset('assets/images/moon.png'),
+                                        child:
+                                            AppImage('assets/images/moon.svg'),
                                       ),
                                     ),
                                     const SizedBox(width: 8),
                                     GestureDetector(
                                       onTap: () {
-                                        context.pushNamed(AppRoutes.notificationScreen);
+                                        context.pushNamed(
+                                            AppRoutes.notificationScreen);
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -97,8 +102,8 @@ class StoryDetailsPage extends StatelessWidget {
                                         ),
                                         height: 40,
                                         width: 40,
-                                        child: Image.asset(
-                                            'assets/images/notification.png'),
+                                        child: AppImage(
+                                            'assets/images/notification.svg'),
                                       ),
                                     ),
                                   ],
@@ -110,7 +115,8 @@ class StoryDetailsPage extends StatelessWidget {
                                       textStyle: Theme.of(context)
                                           .textTheme
                                           .bodyLarge
-                                          ?.copyWith(color: AppColors.primaryColor),
+                                          ?.copyWith(
+                                              color: AppColors.primaryColor),
                                     ),
                                     const SizedBox(width: 10),
                                     IconButton(
@@ -123,25 +129,34 @@ class StoryDetailsPage extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 10),
-                            BlocConsumer<ReedUnReedStoryCubit, ReedUnReedStoryState>(
+                            BlocConsumer<ReedUnReedStoryCubit,
+                                ReedUnReedStoryState>(
                               listener: (context, state) {
                                 if (state is ReedUnReedStorySuccess) {
+                                  Future.delayed(Duration(seconds: 2), () {
+                                    Navigator.pushReplacementNamed(
+                                        context, AppRoutes.homeScreen);
+                                  });
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
+                                      backgroundColor: Colors.green,
                                       content: AppText(
                                         text: 'تمت العمليه',
-                                        textStyle:
-                                            Theme.of(context).textTheme.bodyLarge,
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
                                       ),
                                     ),
                                   );
                                 } else if (state is ReedUnReedStoryFailure) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
+                                      backgroundColor: Colors.red,
                                       content: AppText(
                                         text: state.error,
-                                        textStyle:
-                                            Theme.of(context).textTheme.bodyLarge,
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
                                       ),
                                     ),
                                   );
@@ -153,16 +168,18 @@ class StoryDetailsPage extends StatelessWidget {
                                     if (singleStory.isRead == false) {
                                       context
                                           .read<ReedUnReedStoryCubit>()
-                                          .markStoryAsRead(singleStory.id ?? '');
+                                          .markStoryAsRead(
+                                              singleStory.id ?? '');
                                     } else {
                                       context
                                           .read<ReedUnReedStoryCubit>()
-                                          .markStoryUnRead(singleStory.id ?? '');
+                                          .markStoryUnRead(
+                                              singleStory.id ?? '');
                                     }
                                     if (state is ReedUnReedStorySuccess) {
                                       Future.delayed(Duration(seconds: 3), () {
-                                        context
-                                            .pushReplacementNamed(AppRoutes.homeScreen);
+                                        context.pushReplacementNamed(
+                                            AppRoutes.homeScreen);
                                       });
                                     }
                                   },
@@ -174,10 +191,12 @@ class StoryDetailsPage extends StatelessWidget {
                                           decoration: BoxDecoration(
                                               border: Border.all(
                                                   width: 2,
-                                                  color: singleStory.isRead == true
-                                                      ? Colors.green
-                                                      : Colors.grey),
-                                              borderRadius: BorderRadius.circular(10)),
+                                                  color:
+                                                      singleStory.isRead == true
+                                                          ? Colors.green
+                                                          : Colors.grey),
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceAround,
@@ -189,15 +208,17 @@ class StoryDetailsPage extends StatelessWidget {
                                                       .bodyLarge!
                                                       .copyWith(
                                                           fontSize: 16,
-                                                          color:
-                                                              singleStory.isRead == true
-                                                                  ? Colors.green
-                                                                  : Colors.grey)),
+                                                          color: singleStory
+                                                                      .isRead ==
+                                                                  true
+                                                              ? Colors.green
+                                                              : Colors.grey)),
                                               Icon(
                                                 Icons.check_circle,
-                                                color: singleStory == true
-                                                    ? Colors.green
-                                                    : Colors.grey,
+                                                color:
+                                                    singleStory.isRead == true
+                                                        ? Colors.green
+                                                        : Colors.grey,
                                               ),
                                             ],
                                           ),
@@ -212,7 +233,8 @@ class StoryDetailsPage extends StatelessWidget {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
                                 image: DecorationImage(
-                                  image: NetworkImage(singleStory.imageCover ?? ''),
+                                  image: NetworkImage(
+                                      singleStory.imageCover ?? ''),
                                   fit: BoxFit.cover,
                                   onError: (exception, stackTrace) {
                                     print(
@@ -239,10 +261,14 @@ class StoryDetailsPage extends StatelessWidget {
                                   children: [
                                     AppText(
                                         text: 'حفظ الى الهاتف',
-                                        textStyle: Theme.of(context).textTheme.bodyLarge),
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge),
                                     SizedBox(width: 10),
                                     AppImage('assets/images/import.svg',
-                                        height: 30, width: 30, fit: BoxFit.cover),
+                                        height: 30,
+                                        width: 30,
+                                        fit: BoxFit.cover),
                                   ],
                                 ),
                               ),
@@ -255,8 +281,9 @@ class StoryDetailsPage extends StatelessWidget {
                                     SnackBar(
                                       content: AppText(
                                         text: 'تمت الاضافة الى المفضلة',
-                                        textStyle:
-                                            Theme.of(context).textTheme.bodyLarge,
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
                                       ),
                                     ),
                                   );
@@ -265,8 +292,9 @@ class StoryDetailsPage extends StatelessWidget {
                                     SnackBar(
                                       content: AppText(
                                         text: state.message,
-                                        textStyle:
-                                            Theme.of(context).textTheme.bodyLarge,
+                                        textStyle: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
                                       ),
                                     ),
                                   );
@@ -284,11 +312,14 @@ class StoryDetailsPage extends StatelessWidget {
                                     children: [
                                       AppText(
                                           text: 'اضافة الى المفضلة',
-                                          textStyle:
-                                              Theme.of(context).textTheme.bodyLarge),
+                                          textStyle: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge),
                                       SizedBox(width: 10),
                                       AppImage('assets/images/Vector.svg',
-                                          height: 30, width: 30, fit: BoxFit.cover),
+                                          height: 30,
+                                          width: 30,
+                                          fit: BoxFit.cover),
                                     ],
                                   ),
                                 );
