@@ -1,10 +1,9 @@
-import 'dart:typed_data';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // import 'package:photo_manager/photo_manager.dart';
-
+import 'package:flutter_file_downloader/flutter_file_downloader.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:stories_app/core/extension/navigator.dart';
 import 'package:stories_app/core/route/app_routes.dart';
 import 'package:stories_app/core/theme/app_colors.dart';
@@ -14,16 +13,67 @@ import 'package:stories_app/core/widget/text/app_text.dart';
 import 'package:stories_app/feature/drawer/drawer_page.dart';
 import 'package:stories_app/feature/favorite/controller/cubit/favorite_cubit.dart';
 import 'package:stories_app/feature/home/controller/reed_un_reed_story_cubit.dart';
-import 'package:stories_app/feature/home/controller/save_story.dart';
 import 'package:stories_app/feature/home/controller/single_details_story_cubit.dart';
+import 'package:stories_app/feature/home/views/ImagePreviewScreen.dart';
 
 import '../../../core/widget/Custom_app_image.dart';
 
+void downloadImages(String imageUrl, BuildContext context) async {
+  // ✅ التحقق مما إذا كان المستخدم مسجل دخول أم لا
+  User? user = FirebaseAuth.instance.currentUser;
+  String? apiToken = GetStorage().read('token');
+  if ((user == null || user.isAnonymous) && (apiToken ==null || apiToken.isEmpty) ){
+    // ❌ المستخدم غير مسجل الدخول - عرض رسالة تحذير
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'يرجى تسجيل الدخول أولًا لحفظ الصورة!',
+          style: TextStyle(color: Colors.white,
+          fontFamily: 'ElMessiri'),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
+  }
+
+  // ✅ المستخدم مسجل دخول - السماح بتنزيل الصورة
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(
+        'يتم التحميل...',
+        style: TextStyle(color: Colors.white),
+      ),
+      backgroundColor: Colors.green,
+    ),
+  );
+
+  await FileDownloader.downloadFile(
+    url: imageUrl,
+    onDownloadError: (String error) {
+      print('❌ خطأ في تحميل الصورة: $error');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('فشل تحميل الصورة'), backgroundColor: Colors.red),
+      );
+    },
+    onDownloadCompleted: (String path) {
+      print('✅ تم تحميل الصورة بنجاح: $path');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('تم الحفظ في الهاتف'), backgroundColor: Colors.green),
+      );
+    },
+  );
+}
+
+
+
 class StoryDetailsPage extends StatelessWidget {
+  
   StoryDetailsPage({super.key});
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+     final box = GetStorage();
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: CustomDrawer(),
@@ -227,50 +277,54 @@ class StoryDetailsPage extends StatelessWidget {
                               },
                             ),
                             const SizedBox(height: 10),
-                            Container(
-                              height: MediaQuery.of(context).size.height * 0.5,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                      singleStory.imageCover ?? ''),
-                                  fit: BoxFit.cover,
-                                  onError: (exception, stackTrace) {
-                                    print(
-                                        "❌ فشل تحميل صورة الفئة: ${singleStory.imageCover}");
-                                  },
+                            GestureDetector(
+                              onTap: () {
+                                 Navigator.push(
+                                     context,
+                                     MaterialPageRoute(
+                                    builder: (_) => ImagePreviewScreen(imageUrl: singleStory.imageCover ?? ''),
+                                        ),
+    );
+                              },
+                              child: Container(
+                                height: MediaQuery.of(context).size.height * 0.5,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        singleStory.imageCover ?? ''),
+                                    fit: BoxFit.fill,
+                                    onError: (exception, stackTrace) {
+                                      print(
+                                          "❌ فشل تحميل صورة الفئة: ${singleStory.imageCover}");
+                                    },
+                                  ),
                                 ),
                               ),
                             ),
                             const SizedBox(height: 16),
                             GestureDetector(
-                              onTap: () async {
-                                // context
-                                //     .read<SingleDetailsCategoryCubit>()
-                                //     .saveImageToGallery(
-                                //         'https://images.app.goo.gl/88BG62sPCmv3Bj7v9');
+                              onTap: () {
+                                if (singleStory.imageCover != null) {
+                               downloadImages(singleStory.imageCover ?? '', context);
+                                }
+                              
                               },
-                              child: GestureDetector(
-                                onTap: () async {
-                                  //  String imageUrl = "https://example.com/image.png"; // استبدلها برابط الصورة من الـ API
-                                  //  downloadAndSaveImage(imageUrl);
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    AppText(
-                                        text: 'حفظ الى الهاتف',
-                                        textStyle: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge),
-                                    SizedBox(width: 10),
-                                    AppImage('assets/images/import.svg',
-                                        height: 30,
-                                        width: 30,
-                                        fit: BoxFit.cover),
-                                  ],
-                                ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  AppText(
+                                      text: 'حفظ الى الهاتف',
+                                      textStyle: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge),
+                                  SizedBox(width: 10),
+                                  AppImage('assets/images/import.svg',
+                                      height: 30,
+                                      width: 30,
+                                      fit: BoxFit.cover),
+                                ],
                               ),
                             ),
                             const SizedBox(height: 16),
@@ -303,10 +357,28 @@ class StoryDetailsPage extends StatelessWidget {
                               builder: (context, state) {
                                 return GestureDetector(
                                   onTap: () {
-                                    context
-                                        .read<FavoriteCubit>()
-                                        .addFavorite(singleStory.id ?? '');
-                                  },
+                                     String? apiToken = box.read('token'); 
+                                      User? user = FirebaseAuth.instance.currentUser;
+  
+                                    if ((user == null || user.isAnonymous) && (apiToken == null || apiToken.isEmpty)) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                content: Text(
+          'يرجى تسجيل الدخول أولًا لإضافة القصة إلى المفضلة!',
+          style: TextStyle( 
+            fontFamily: 'ElMessiri',
+            color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
+  }
+
+  // ✅ المستخدم مسجل دخول - السماح بالإضافة
+  context.read<FavoriteCubit>().addFavorite(singleStory.id ?? '');
+},
+
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [

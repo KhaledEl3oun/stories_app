@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gap/gap.dart';
 import 'package:stories_app/core/extension/navigator.dart';
 import 'package:stories_app/core/resource/app_images.dart';
 import 'package:stories_app/core/route/app_routes.dart';
@@ -119,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                                 content: Text(
                               "تم تسجيل الدخول بنجاح!",
                               style: TextStyle(
-                                  color: Colors.green, fontFamily: 'cairo'),
+                                  color: Colors.green, fontFamily: 'Elmessiri'),
                             )),
                           );
                           Future.microtask(() {
@@ -133,23 +134,36 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       builder: (context, state) {
                         return Center(
-                          child: AppButton(
-                            minimumSize:
-                                MaterialStateProperty.all(const Size(380, 50)),
-                            onPressed: state is AuthLoading
-                                ? null
-                                : () {
-                                    if (_formKey.currentState!.validate()) {
-                                      BlocProvider.of<AuthCubit>(context).login(
-                                        emailController.text,
-                                        passwordController.text,
-                                      );
-                                    }
-                                  },
-                            text: state is AuthLoading
-                                ? "جاري تسجيل الدخول..."
-                                : "تسجيل الدخول",
+                          child: Column(
+                            children: [
+                              AppButton(
+                                minimumSize:
+                                    MaterialStateProperty.all(const Size(380, 50)),
+                                onPressed: state is AuthLoading
+                                    ? null
+                                    : () {
+                                        if (_formKey.currentState!.validate()) {
+                                          BlocProvider.of<AuthCubit>(context).login(
+                                            emailController.text,
+                                            passwordController.text,
+                                          );
+                                        }
+                                      },
+                                text: state is AuthLoading
+                                    ? "جاري تسجيل الدخول..."
+                                    : "تسجيل الدخول",
+                              ),
+                              
+                              Gap(5.h),
+                          AppButton(
+                        onPressed: () async{
+                          await BlocProvider.of<AuthCubit>(context).signInAnonymously(context);
+                        },
+                        text:"👋🏽تسجيل الدخول كزائر",
+    )
+                            ],
                           ),
+
                         );
                       },
                     ),

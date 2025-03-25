@@ -5,11 +5,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:stories_app/core/extension/navigator.dart';
 import 'package:stories_app/core/route/app_routes.dart';
-import 'package:stories_app/core/theme/app_colors.dart';
 import 'package:stories_app/core/widget/app_padding/app_padding.dart';
-import 'package:stories_app/core/widget/text/app_text.dart';
+import 'package:stories_app/feature/auth/controller/auth_cubit.dart';
 import 'package:stories_app/feature/drawer/drawer_page.dart';
 import 'package:stories_app/feature/home/views/widget/custom_row_header.dart';
+import 'package:stories_app/feature/notification/views/notification.dart';
 
 class MyAccount extends StatefulWidget {
   MyAccount({super.key});
@@ -106,6 +106,35 @@ class _MyAccountState extends State<MyAccount> {
                       ProfileItem(title: 'الهاتف', value: phone?? '', onTap: () => context.pushNamed(AppRoutes.updatePhone)),
                       ProfileItem(title: 'البريد الالكترونى', value: email?? '', onTap: () => context.pushNamed(AppRoutes.updateEmail)),
                       ProfileItem(title: 'كلمة المرور', value: '********', onTap: () => context.pushNamed(AppRoutes.updatePassword)),
+                   ElevatedButton(
+  onPressed: () {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('حذف الحساب',textAlign: TextAlign.right,
+        style: TextStyle(fontFamily: 'ElMessiri',color: AppColors.primaryColor),),
+        content: Text('هل أنت متأكد أنك تريد حذف حسابك؟ هذا الإجراء لا يمكن التراجع عنه.',textAlign: TextAlign.right,
+        style: TextStyle(fontFamily: 'ElMessiri',color: AppColors.primaryColor)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('إلغاء',style: TextStyle(fontFamily: 'ElMessiri',color: AppColors.primaryColor)),
+          ),
+          TextButton(
+            onPressed: () {
+             
+              context.read<AuthCubit>().deleteAccount();
+             context.pushReplacementNamed(AppRoutes.loginScreen);
+            },
+            child: Text('حذف', style: TextStyle(color: Colors.red, fontFamily: 'ElMessiri')),
+          ),
+        ],
+      ),
+    );
+  },
+  child: Text('حذف الحساب'),
+)
+
                     ],
                   ),
                 ),

@@ -56,7 +56,8 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   const SizedBox(height: 50),
                   AppBarCustom(
-                    title: ' $userNameمرحبا بك',
+                    title: '👋🏽 مرحبا بك ',
+                    //' ${userName.split(' ').first}مرحبا بك',
                     scaffoldKey: _scaffoldKey,
                   ),
                   const SizedBox(height: 20),
@@ -97,8 +98,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 20),
                   AppText(
+                    fontWeight: FontWeight.w400,
                     text: 'الأقسام',
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     color: AppColors.primaryColor,
                   ),
                   const SizedBox(height: 20),
@@ -192,7 +194,8 @@ class _HomePageState extends State<HomePage> {
                                                 Center(
                                                   child: Text(category.name,
                                                       style: TextStyle(
-                                                        fontFamily: 'cairo',
+                                                        fontSize: 16.sp,
+                                                        fontFamily: 'ElMessiri',
                                                         color: Theme.of(context)
                                                                     .scaffoldBackgroundColor ==
                                                                 Color(
@@ -217,9 +220,9 @@ class _HomePageState extends State<HomePage> {
                               child: Text(
                                 "أحدث المنشورات",
                                 style: TextStyle(
-                                    fontFamily: 'cairo',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'ElMessiri',
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w400,
                                     color: AppColors.primaryColor),
                               ),
                             ),
@@ -287,11 +290,11 @@ class _HomePageState extends State<HomePage> {
                                                             Radius.circular(16),
                                                         bottomRight:
                                                             Radius.circular(
-                                                                16)),
+                                                                12)),
                                                 image: DecorationImage(
                                                   image: NetworkImage(
                                                       story.imageCover),
-                                                  fit: BoxFit.cover,
+                                                  fit: BoxFit.fill,
                                                   onError:
                                                       (exception, stackTrace) {
                                                     print(
@@ -303,13 +306,14 @@ class _HomePageState extends State<HomePage> {
                                             Gap(5.h),
                                             Expanded(
                                               child: Column(
+                                                
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
                                                     story.title,
                                                     style: TextStyle(
-                                                      fontFamily: "cairo",
+                                                      fontFamily: "ElMessiri",
                                                       color: Theme.of(context)
                                                                   .scaffoldBackgroundColor ==
                                                               Color(0xff191201)
@@ -334,38 +338,38 @@ class _HomePageState extends State<HomePage> {
                                   },
                                 ),
                               ),
-                            if (category1Cubit.totalPages > 1)
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  IconButton(
-                                    onPressed: category1Cubit.currentPage > 1
-                                        ? () {
-                                            category1Cubit.fetchPreviousPage();
-                                          }
-                                        : null,
-                                    icon: Icon(Icons.arrow_back_ios,
-                                        color: AppColors.primaryColor),
-                                  ),
-                                  Text(
-                                    "${category1Cubit.currentPage} من ${category1Cubit.totalPages}",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: AppColors.primaryColor),
-                                  ),
-                                  IconButton(
-                                    onPressed: category1Cubit.currentPage <
-                                            category1Cubit.totalPages
-                                        ? () {
-                                            category1Cubit.fetchNextPage();
-                                          }
-                                        : null,
-                                    icon: Icon(Icons.arrow_forward_ios,
-                                        color: AppColors.primaryColor),
-                                  ),
-                                ],
-                              ),
+                            // if (category1Cubit.totalPages > 1)
+                            //   Row(
+                            //     mainAxisAlignment:
+                            //         MainAxisAlignment.spaceAround,
+                            //     children: [
+                            //       IconButton(
+                            //         onPressed: category1Cubit.currentPage > 1
+                            //             ? () {
+                            //                 category1Cubit.fetchPreviousPage();
+                            //               }
+                            //             : null,
+                            //         icon: Icon(Icons.arrow_back_ios,
+                            //             color: AppColors.primaryColor),
+                            //       ),
+                            //       Text(
+                            //         "${category1Cubit.currentPage} من ${category1Cubit.totalPages}",
+                            //         style: TextStyle(
+                            //             fontSize: 16,
+                            //             color: AppColors.primaryColor),
+                            //       ),
+                            //       IconButton(
+                            //         onPressed: category1Cubit.currentPage <
+                            //                 category1Cubit.totalPages
+                            //             ? () {
+                            //                 category1Cubit.fetchNextPage();
+                            //               }
+                            //             : null,
+                            //         icon: Icon(Icons.arrow_forward_ios,
+                            //             color: AppColors.primaryColor),
+                            //       ),
+                            //     ],
+                            //   ),
                           ],
                         );
                       }

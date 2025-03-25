@@ -23,26 +23,41 @@ class UserModel {
     this.token,
   });
 
- factory UserModel.fromJson(Map<String, dynamic> json) {
-  final data = json.containsKey('data') ? json['data'] : json; // تأكد من وجود 'data' أولًا
+ factory UserModel.fromJson(Map<String, dynamic>? json) {
+  if (json == null) {
+    throw ArgumentError("❌ JSON is null!");
+  }
+
+  final data = json['data'] is Map<String, dynamic> ? json['data'] : json;
+
   return UserModel(
-    userName: data['userName'],
-    email: data['email'],
-    phone: data['phone'],
-    role: data['role'],
-    id: data['_id'],
-    createdAt: data['createdAt'],
-    updatedAt: data['updatedAt'],
-    readStories: data.containsKey('readStories')
-        ? List<String>.from(data['readStories'])
-        : [],
-    wishlist: data.containsKey('wishlist')
-        ? List<String>.from(data['wishlist'])
-        : [],
-    token: json['token'],
+    userName: data['userName'] as String?,
+    email: data['email'] as String?,
+    phone: data['phone'] as String?,
+    role: data['role'] as String?,
+    id: data['_id'] as String?,
+    createdAt: data['createdAt'] as String?,
+    updatedAt: data['updatedAt'] as String?,
+    readStories: (data['readStories'] as List?)?.map((e) => e.toString()).toList() ?? [],
+    wishlist: (data['wishlist'] as List?)?.map((e) => e.toString()).toList() ?? [],
+    token: json['token'] as String?,
   );
 }
 
-  toJson() {}
+
+  Map<String, dynamic> toJson() {
+    return {
+      'userName': userName,
+      'email': email,
+      'phone': phone,
+      'role': role,
+      '_id': id,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+      'readStories': readStories ?? [],
+      'wishlist': wishlist ?? [],
+      'token': token,
+    };
+  }
 
 }

@@ -10,6 +10,7 @@ import 'package:stories_app/core/widget/text/app_text.dart';
 class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final GlobalKey<ScaffoldState> scaffoldKey;
+
   AppBarCustom({
     Key? key,
     required this.title,
@@ -18,69 +19,74 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                context.read<ThemeCubit>().toggleTheme();
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).scaffoldBackgroundColor ==
-                          Color(0xff191201)
-                      ? Color(0xff2b1e08)
-                      : Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                height: 40,
-                width: 40,
-                child: AppImage('assets/images/moon.svg'),
+    double screenWidth = MediaQuery.of(context).size.width;
+    bool isSmallScreen = screenWidth < 400;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          /// أيقونات السمة والإشعارات
+          Row(
+            children: [
+              _buildIconButton(
+                context,
+                onTap: () => context.read<ThemeCubit>().toggleTheme(),
+                assetPath: 'assets/images/moon.svg',
               ),
-            ),
-            const SizedBox(width: 8),
-            GestureDetector(
-              onTap: () {
-                context.pushNamed(AppRoutes.notificationScreen);
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).scaffoldBackgroundColor ==
-                          Color(0xff191201)
-                      ? Color(0xff2b1e08)
-                      : Colors.white,
-                ),
-                height: 40,
-                width: 40,
-                child: AppImage('assets/images/notification.svg'),
+              const SizedBox(width: 8),
+              _buildIconButton(
+                context,
+                onTap: () => context.pushNamed(AppRoutes.notificationScreen),
+                assetPath: 'assets/images/notification.svg',
               ),
-            ),
-          ],
-        ),
-        Expanded(
-          child: Row(
+            ],
+          ),
+
+          /// العنوان
+          Row(
             children: [
               AppText(
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
                 text: title,
-                fontSize: 20,
+                fontSize: isSmallScreen ? 18 : 20,
                 color: AppColors.primaryColor,
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(width: 10),
+              
+              /// زر القائمة
               IconButton(
-                onPressed: () {
-                  scaffoldKey.currentState?.openEndDrawer();
-                },
-                icon: const Icon(Icons.menu_rounded),
+                onPressed: () => scaffoldKey.currentState?.openEndDrawer(),
+                icon: Icon(
+                  Icons.menu_rounded,
+                  size: isSmallScreen ? 22 : 28,
+                ),
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildIconButton(BuildContext context,
+      {required VoidCallback onTap, required String assetPath}) {
+    bool isDarkMode =
+        Theme.of(context).scaffoldBackgroundColor == const Color(0xff191201);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: isDarkMode ? const Color(0xff2b1e08) : Colors.white,
+          shape: BoxShape.circle,
         ),
-      ],
+        height: 35,
+        width: 35,
+        child: AppImage(assetPath),
+      ),
     );
   }
 

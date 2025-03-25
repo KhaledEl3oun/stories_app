@@ -39,6 +39,8 @@ dependencies:
     sdk: flutter
   flutter_advanced_switch: null
   flutter_bloc: ^9.1.0
+  flutter_file_downloader: ^2.1.0
+  flutter_local_notifications: ^19.0.0
   flutter_otp_text_field: ^1.1.3+2
   flutter_rating_bar: null
   flutter_screenutil: ^5.9.3
@@ -51,7 +53,9 @@ dependencies:
   lottie: ^3.0.0
   path_provider: ^2.1.5
   permission_handler: ^11.4.0
+  photo_view: ^0.15.0
   smooth_page_indicator: ^1.2.1
+  socket_io_client: ^3.0.2
   x_validators: ^1.0.8
 dev_dependencies:
   flutter_launcher_icons: ^0.14.3
@@ -66,19 +70,20 @@ flutter_launcher_icons:
   adaptive_icon_background: "#ffffff"
   adaptive_icon_foreground: "assets/images/icon.png"
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
 flutter:
   fonts:
-    - family: Cairo
+    - family: ElMessiri
       fonts:
-        - asset: assets/fonts/Cairo-Regular.ttf
-          weight: 400
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
+        - asset: assets/fonts/ElMessiri-Regular.ttf
+        - asset: assets/fonts/ElMessiri-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/ElMessiri-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/ElMessiri-Medium.ttf
+          weight: 500
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:

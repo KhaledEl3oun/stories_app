@@ -30,6 +30,7 @@ class AppRoutes {
   static const String storyPage = '/storyPage';
   static const String subStoryPage = '/subStoryPage';
   static const String storyDetailsPage = '/storyDetailsPage';
+  static const String imagePreviewPage = '/imagePreviewPage';
 
   /// 🔹 **Requests Screens**
   static const String requestsDetailsScreen = '/requestsDetailsScreen';

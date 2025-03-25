@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:stories_app/core/route/app_routes.dart';
 import 'package:stories_app/core/shared.dart';
 
 import '../../../core/network/dio_helper.dart';
@@ -112,23 +113,31 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   // 🔵 تسجيل حساب جديد
-  void register(String userName, String email, String phone, String password,
-      String passwordConfirm) async {
-    emit(AuthLoading());
-    try {
-      final response = await DioHelper.postData(
-        url: Endpoints.register,
-        data: {
-          'userName': userName,
-          'email': email,
-          'phone': phone,
-          'password': password,
-          'passwordConfirm': passwordConfirm,
-        },
-      );
+ void register(String userName, String email, String phone, String password,
+    String passwordConfirm) async {
+  emit(AuthLoading());
 
-      if (response.statusCode == 201 && response.data.containsKey("data")) {
-        final userModel = UserModel.fromJson(response.data['data']);
+  try {
+    final response = await DioHelper.postData(
+      url: Endpoints.register,
+      data: {
+        'userName': userName,
+        'email': email,
+        'phone': phone,
+        'password': password,
+        'passwordConfirm': passwordConfirm,
+      },
+    );
+
+    // طباعة الرد من الـ API لمعرفة إن كان هناك مشكلة في البيانات
+    print("📌 API Response: ${response.data}");
+
+    if (response.statusCode == 201 && response.data.containsKey("data")) {
+      var responseData = response.data['data'];
+
+      // التأكد من أن البيانات ليست `null` وأنها من نوع `Map<String, dynamic>`
+      if (responseData != null && responseData is Map<String, dynamic>) {
+        final userModel = UserModel.fromJson(responseData);
 
         // تحويل `UserModel` إلى JSON قبل التخزين
         box.write('userModel', userModel.toJson());
@@ -138,17 +147,39 @@ class AuthCubit extends Cubit<AuthState> {
 
         emit(AuthRegistered(userModel));
       } else {
-        emit(AuthFailure("فشل إنشاء الحساب، استجابة غير متوقعة!"));
+        emit(AuthFailure("❌ البيانات غير صحيحة أو فارغة!"));
       }
-    } catch (error) {
-      if (error is DioException) {
-        emit(AuthFailure(
-            error.response?.data['message'] ?? "حدث خطأ أثناء إنشاء الحساب"));
-      } else {
-        emit(AuthFailure("حدث خطأ غير متوقع"));
-      }
+    } else {
+      emit(AuthFailure("❌ فشل إنشاء الحساب، استجابة غير متوقعة!"));
+    }
+  } catch (error) {
+    if (error is DioException) {
+      print("❌ Dio Error: ${error.response?.data}");
+
+      emit(AuthFailure(
+          error.response?.data['message'] ?? "❌ حدث خطأ أثناء إنشاء الحساب"));
+    } else {
+      print("❌ Unexpected Error: $error");
+      emit(AuthFailure("❌ حدث خطأ غير متوقع"));
     }
   }
+}
+
+// الدخول ك زائر
+Future<void> signInAnonymously(BuildContext context) async {
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance.signInAnonymously();
+    print("✅ تسجيل الدخول كزائر ناجح: ${userCredential.user?.uid}");
+
+    if (context.mounted) {  // حل مشكلة use_build_context_synchronously
+      Navigator.pushReplacementNamed(context,AppRoutes.homeScreen);
+    }
+  } catch (e) {
+    print("❌ خطأ في تسجيل الدخول كزائر: $e");
+  }
+}
+
+
 
   // 🟠 **طلب إعادة تعيين كلمة المرور (Forgot Password)**
   void forgotPassword(String email) async {
@@ -166,6 +197,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthFailure("فشل إرسال طلب إعادة تعيين كلمة المرور"));
       }
     } catch (error) {
+       print("❌ فشل الاتصال بالسيرفر: $error");
       emit(AuthFailure("حدث خطأ أثناء إرسال طلب إعادة تعيين كلمة المرور"));
     }
   }
@@ -253,4 +285,43 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthFailure("❌ حدث خطأ أثناء تحديث البيانات!"));
     }
   }
+
+void deleteAccount() async {
+  emit(AuthLoading());
+  try {
+    String? token = box.read('token');
+    if (token == null) {
+      emit(AuthFailure("لم يتم العثور على التوكين، الرجاء تسجيل الدخول."));
+      return;
+    }
+
+    final response = await DioHelper.deleteData(
+      url: '/api/v1/user/deleteMyAcc',
+      data: {}, headers: {
+         "Authorization": "Bearer $token",
+      }, // ممكن يكون الـ API مش محتاج بيانات، لو محتاج أضفها هنا
+    );
+
+    final responseData = response.data;
+    debugPrint("🟢 Response Data: $responseData");
+
+    if (response.statusCode == 200) {
+      box.erase(); // ✅ مسح بيانات المستخدم من التخزين
+      print('okkkkkkkk');
+      emit(AuthLoggedOut());
+    } else {
+
+      emit(AuthFailure("حدث خطأ أثناء حذف الحساب، حاول مرة أخرى."));
+    }
+  } catch (error) {
+    if (error is DioException) {
+      print('error:${error.response?.data}');
+      emit(AuthFailure(
+          error.response?.data['message'] ?? "فشل في حذف الحساب."));
+    } else {
+      emit(AuthFailure("حدث خطأ غير متوقع، يرجى المحاولة لاحقًا."));
+    }
+  }
+}
+
 }

@@ -39,7 +39,7 @@ class CustomInputField extends StatelessWidget {
         label,
         style: TextStyle(
           color: AppColors.primaryColor,
-          fontFamily: "Cairo",
+          fontFamily: "ElMessiri",
           fontSize: 16.sp,
           fontWeight: FontWeight.w600,
         ),

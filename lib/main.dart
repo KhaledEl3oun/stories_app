@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:stories_app/core/network/dio_helper.dart';
 import 'package:stories_app/core/route/app_routes.dart';
 import 'package:stories_app/core/route/route_generate.dart';
+import 'package:stories_app/core/services/my_firebase_messaging_service.dart';
 import 'package:stories_app/core/theme/app_themes.dart';
 import 'package:stories_app/core/theme/cubit/theme_cubit.dart';
 import 'package:stories_app/feature/auth/controller/auth_cubit.dart';
@@ -18,6 +19,8 @@ import 'package:stories_app/feature/home/controller/reed_un_reed_story_cubit.dar
 import 'package:stories_app/feature/home/controller/single_details_story_cubit.dart';
 import 'package:stories_app/feature/home/controller/sub_category_cubit.dart';
 import 'package:stories_app/feature/home/controller/sub_story_cubit.dart';
+import 'package:stories_app/feature/notification/not_networking/NotificationService.dart';
+import 'package:stories_app/feature/notification/views/sockit_helper.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   // هذا يعمل عندما يكون التطبيق في الخلفية أو مغلق
@@ -27,7 +30,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SocketService().initSocket();
   await Firebase.initializeApp();
+   await NotificationService().initNotifications();
+   MyFirebaseMessagingService.init();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await GetStorage.init();

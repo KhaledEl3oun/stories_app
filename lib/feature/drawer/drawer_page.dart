@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:stories_app/core/extension/navigator.dart';
 import 'package:stories_app/core/route/app_routes.dart';
 import 'package:stories_app/core/theme/cubit/theme_cubit.dart';
@@ -37,10 +39,42 @@ class CustomDrawer extends StatelessWidget {
               }),
               const Divider(),
               _buildDrawerItem('حسابي', Icons.person, context, () {
+  User? user = FirebaseAuth.instance.currentUser;
+  String? apiToken = GetStorage().read('token');
+  if ((user == null || user.isAnonymous) && (apiToken == null || apiToken.isEmpty) ){
+    // ❌ المستخدم غير مسجل - عرض رسالة تحذير
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'يرجى تسجيل الدخول أولًا للدخول لهذه الصفحه!',
+          style: TextStyle(fontFamily: 'ElMessiri',color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
+  }
                 context.pushNamed(AppRoutes.myAccount);
               }),
               const Divider(),
               _buildDrawerItem('المفضلة', Icons.favorite, context, () {
+                 User? user = FirebaseAuth.instance.currentUser;
+                 String? apiToken = GetStorage().read('token');
+  
+  if ((user == null || user.isAnonymous) && (apiToken == null || apiToken.isEmpty) ){
+    // ❌ المستخدم غير مسجل - عرض رسالة تحذير
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'يرجى تسجيل الدخول أولًا للدخول لهذه الصفحه!',
+          style: TextStyle(
+            fontFamily: 'ElMessiri',color: Colors.white),
+        ),
+        backgroundColor: Colors.red,
+      ),
+    );
+    return;
+  }
                 context.pushNamed(AppRoutes.favoriteScreen);
                 context.read<FavoriteCubit>().fetchGetAllFavorite();
               }),

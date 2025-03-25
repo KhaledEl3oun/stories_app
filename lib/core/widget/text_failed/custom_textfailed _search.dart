@@ -64,7 +64,7 @@ class _CustomTextFieldState extends State<CustomTextFieldSearch> {
               ? null
               : widget.errorText,
           hintText: widget.hintText,
-          hintStyle: const TextStyle(color: Colors.grey,fontFamily: "cairo"),
+          hintStyle: const TextStyle(color: Colors.grey,fontFamily: "ElMessiri"),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
             borderSide: const BorderSide(

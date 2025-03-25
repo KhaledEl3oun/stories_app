@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:get_storage/get_storage.dart';
 
 class DioHelper {
   static late Dio dio;
@@ -69,10 +70,23 @@ class DioHelper {
   }
 
   // 🔴 طلب **DELETE** لحذف البيانات
-  static Future<Response> deleteData({
-    required String url,
-    Map<String, dynamic>? data,
-  }) async {
-    return await dio.delete(url, data: data);
-  }
+ static Future<Response> deleteData({
+  required String url,
+  Map<String, dynamic>? data, required Map<String, String> headers,
+}) async {
+  final box = GetStorage();
+  String? token = box.read('token'); // ✅ جلب التوكن من التخزين
+
+  final headers = {
+    'Authorization': 'Bearer $token', // ✅ إرسال التوكن في الهيدر
+    'Content-Type': 'application/json',
+  };
+
+  return await dio.delete(
+    url,
+    data: data,
+    options: Options(headers: headers),
+  );
+}
+
 }

@@ -33,7 +33,7 @@ class AppText extends StatelessWidget {
         fontSize: fontSize,
         fontWeight: fontWeight,
         color: color,
-        fontFamily: "Cairo",
+        fontFamily: "ElMessiri",
       ), // ✅ يحصل على الثيم المحدث
       softWrap: softWrap,
       overflow: overflow,
